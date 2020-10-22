@@ -141,7 +141,7 @@ For more information about the GraplhQL syntax, please see [graphql.org](https:/
 
     $result = $apiClient->executeRawGraphQLCall(
         $apiClient::OAUTH_SCOPE_USER,               # The oauth-scope you wish to address the api with
-        query{Article(id:1){id,name}},              # simple raw GraphQL operation without variables 
+        'query{Article(id:1){id,name}}',            # simple raw GraphQL operation without variables 
         [],                                         # the variables for the operation (if necessary)
         true,                                       # execute as POST request (false for GET)
         true,                                       # retrieve result as parsed object (false for raw JSON)

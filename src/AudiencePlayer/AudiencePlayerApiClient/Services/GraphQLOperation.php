@@ -151,7 +151,7 @@ class GraphQLOperation
     /**
      * @return ApiResponse
      */
-    public function execute(): ApiResponse
+    public function execute()
     {
         $ret = $this->graphQLService->assembleAndDispatchGraphQLCall(
             $this->accessAgentType,

@@ -87,7 +87,7 @@ class GraphQLService
         string $operationName,
         array $args,
         array $responseProperties
-    ): ApiResponse
+    )
     {
         if (
             in_array($operationType, [Globals::GRAPHQL_OPERATION_TYPE_MUTATION, Globals::GRAPHQL_OPERATION_TYPE_QUERY]) &&

@@ -1,9 +1,9 @@
 # AudiencePlayer API client for PHP
 
 ## Introduction
-This package contains the AudiencePlayer API-client for PHP and facilitates
-* API-integration with your own administration and/or back office
-* Custom frontend application development  
+This package contains the AudiencePlayer API-client for PHP and facilitates:
+* API-integration with your own administration and/or back office.
+* Custom frontend application development.
 
 Though not strictly necessary, a pre-existing [AudiencePlayer account](https://www.audienceplayer.com/contact) with issued
 OAuth2 client credentials is the main use case for which this package is optimised. 
@@ -41,7 +41,12 @@ First instantiate the API-client:
     $apiBaseUrl = 'https://api.example.com';
 
     # Instantiate with your clientId, clientSecret, projectId and apiBaseUrl
-    $apiClient = AudiencePlayerApiClient::init($clientId, $clientSecret, $projectId, $apiBaseUrl);
+    $apiClient = AudiencePlayerApiClient::init(
+        $clientId,
+        $clientSecret,
+        $projectId,
+        $apiBaseUrl
+    );
 ```
 
 Authenticate via the proper mechanism to gain access for a given user (or alternatively as an OAuth2 admin client):
@@ -54,7 +59,14 @@ Authenticate via the proper mechanism to gain access for a given user (or altern
     $isAutoRegister = true;
  
     # Compare new token with pre-existing token and update your stored token if necessary 
-    $newBearerToken = $apiClient->hydrateValidatedOrRenewedBearerTokenForUser($userEmail, $isAutoRegister, $bearerToken);
+    $newBearerToken = $apiClient->hydrateValidatedOrRenewedBearerTokenForUser(
+        $userId,
+        $userEmail,
+        $userArgs,
+        $bearerToken,
+        $isAutoRegister,
+        $isAllowRenewal
+    );
 ```
 
 ### Execute Queries and Mutations ###
@@ -98,7 +110,7 @@ Example of a GraphQL mutation operation:
     $result = $apiClient->mutation
         ->UserDetails()
         ->arguments(['email' => 'info2@example.com'])               # update with given arguments
-        ->execute();        
+        ->execute();
 ```
 
 You can easily process the operation result object with the following helpers:

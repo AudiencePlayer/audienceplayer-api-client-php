@@ -1,0 +1,38 @@
+{
+    "name": "audienceplayer/audienceplayer-api-client-php",
+    "description": "AudiencePlayer API client library for PHP.",
+    "homepage": "https://github.com/audienceplayer/audienceplayer-api-client-php",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Audienceplayer",
+            "email": "support@audienceplayer.com"
+        }
+    ],
+    "keywords": [
+        "audienceplayer",
+        "video",
+        "platform"
+    ],
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*",
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "codedungeon/phpunit-result-printer": "^0.29.3",
+        "johnkary/phpunit-speedtrap": "^3.2",
+        "symfony/var-dumper": "^5.1",
+        "phpunit/phpunit": "^8"
+    },
+    "autoload": {
+        "psr-4": {
+            "AudiencePlayer\\": "src/AudiencePlayer/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}

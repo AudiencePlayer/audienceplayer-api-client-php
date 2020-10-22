@@ -1,0 +1,20 @@
+### project/IDE files
+.settings
+.buildpath
+.project
+.DS_Store
+.tags*
+*.bbprojectd
+*.lock
+.idea
+.vagrant
+.tmp/
+
+### packages
+/vendor/
+
+### phpunit
+/report/*
+/phpunit-exclude.xml
+/.phpunit*
+/test.php

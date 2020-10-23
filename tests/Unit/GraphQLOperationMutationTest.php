@@ -26,6 +26,7 @@ class GraphQLOperationMutationTest extends TestCase
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserSubscriptionAcquire(1, 1, '/home', 'FOOBAR')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserProductAcquire(1, [1, 2, 3], '/home', 'FOOBAR')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserPaymentVoucherRedeem('FOOBAR', 1, '/home', 1, 1)));
+        $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserPaymentAccountOrderValidate(1)));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserDevicePairingClaim('FOOBAR')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserDevicePairingDelete(1)));
     }

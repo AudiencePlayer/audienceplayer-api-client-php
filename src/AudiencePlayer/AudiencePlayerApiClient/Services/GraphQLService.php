@@ -504,6 +504,11 @@ class GraphQLService
         }
     }
 
+    /**
+     * @param array $args
+     * @param bool $withBraces
+     * @return string
+     */
     protected function parseGraphQLPropsFromArray(array $args, $withBraces = true): string
     {
         array_walk($args, function (&$value, $key) {
@@ -526,7 +531,6 @@ class GraphQLService
             return '';
         }
     }
-
 
     /**
      * @param $operationType

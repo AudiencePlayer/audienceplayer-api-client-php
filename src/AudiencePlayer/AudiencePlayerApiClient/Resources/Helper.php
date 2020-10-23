@@ -94,6 +94,11 @@ class Helper
 
     // ### INTERNAL HELPERS ###
 
+    /**
+     * @param $url
+     * @param array $options
+     * @return array
+     */
     protected function prepareCurlRequest($url, array $options = [])
     {
         $curlOptions = [

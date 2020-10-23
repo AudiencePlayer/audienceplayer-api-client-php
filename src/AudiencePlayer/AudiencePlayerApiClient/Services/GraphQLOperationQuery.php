@@ -38,7 +38,15 @@ use AudiencePlayer\AudiencePlayerApiClient\Resources\Globals;
 
 class GraphQLOperationQuery extends GraphQLOperation
 {
-    // As an OAuth client query a user
+    /**
+     * As an OAuth client query a user
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $userId
+     * @param string|null $email
+     * @return GraphQLOperationQuery
+     */
     public function ClientUser(string $clientId, string $clientSecret, int $userId = 0, string $email = null)
     {
         $args = [
@@ -63,7 +71,11 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch user details for current user
+    /**
+     * Fetch user details for current user
+     *
+     * @return GraphQLOperationQuery
+     */
     public function UserDetails()
     {
         return $this->prepareExecution(
@@ -76,7 +88,11 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of actual user subscriptions (typically one or none)
+    /**
+     * Fetch list of actual user subscriptions (typically one or none)
+     *
+     * @return GraphQLOperationQuery
+     */
     public function UserSubscriptionList()
     {
         return $this->prepareExecution(
@@ -105,7 +121,11 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of actual user subscriptions (typically one or none)
+    /**
+     * Fetch list of actual user subscriptions (typically one or none)
+     *
+     * @return GraphQLOperationQuery
+     */
     public function UserProductList()
     {
         return $this->prepareExecution(
@@ -125,7 +145,11 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of all paired devices for current user
+    /**
+     * Fetch list of all paired devices for current user
+     *
+     * @return GraphQLOperationQuery
+     */
     public function DeviceList()
     {
         return $this->prepareExecution(
@@ -138,7 +162,12 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch details of given Article
+    /**
+     * Fetch details of given Article
+     *
+     * @param int $articleId
+     * @return GraphQLOperationQuery
+     */
     public function Article(int $articleId)
     {
         return $this->prepareExecution(
@@ -159,7 +188,12 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of Articles
+    /**
+     * Fetch list of Articles
+     *
+     * @param int|null $categoryId
+     * @return GraphQLOperationQuery
+     */
     public function ArticleList(int $categoryId = null)
     {
         $args = [];
@@ -189,7 +223,12 @@ class GraphQLOperationQuery extends GraphQLOperation
     }
 
 
-    // Fetch details of given Category
+    /**
+     * Fetch details of given Category
+     *
+     * @param int $categoryId
+     * @return GraphQLOperationQuery
+     */
     public function Category(int $categoryId)
     {
         return $this->prepareExecution(
@@ -208,7 +247,12 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of Categories
+    /**
+     * Fetch list of Categories
+     *
+     * @param int|null $parentId
+     * @return GraphQLOperationQuery
+     */
     public function CategoryList(int $parentId = null)
     {
         $args = [];
@@ -235,7 +279,12 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of offered subscriptions
+    /**
+     * Fetch list of offered subscriptions
+     *
+     * @param array $paymentProviderIds
+     * @return GraphQLOperationQuery
+     */
     public function SubscriptionList(array $paymentProviderIds)
     {
         return $this->prepareExecution(
@@ -263,7 +312,12 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    // Fetch list of offered products
+    /**
+     * Fetch list of offered products
+     *
+     * @param array $paymentProviderIds
+     * @return GraphQLOperationQuery
+     */
     public function ProductList(array $paymentProviderIds)
     {
         return $this->prepareExecution(

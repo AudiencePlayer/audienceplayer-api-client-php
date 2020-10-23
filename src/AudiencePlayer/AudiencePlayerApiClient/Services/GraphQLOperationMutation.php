@@ -38,7 +38,14 @@ use AudiencePlayer\AudiencePlayerApiClient\Resources\Globals;
 
 class GraphQLOperationMutation extends GraphQLOperation
 {
-    // Authenticate as an OAuth client on admin scope
+    /**
+     * Authenticate as an OAuth client on admin scope
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $projectId
+     * @return GraphQLOperationMutation
+     */
     public function AdminClientAuthenticate(string $clientId, string $clientSecret, int $projectId)
     {
         return $this->prepareExecution(
@@ -55,7 +62,13 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Authenticate as an OAuth client
+    /**
+     * Authenticate as an OAuth client
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @return GraphQLOperationMutation
+     */
     public function ClientAuthenticate(string $clientId, string $clientSecret)
     {
         return $this->prepareExecution(
@@ -72,19 +85,44 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // As an OAuth client authenticate for given user by userEmail
+    /**
+     * As an OAuth client authenticate for given user by userEmail
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $userEmail
+     * @param bool $isAutoRegister
+     * @return GraphQLOperationMutation
+     */
     public function ClientUserAuthenticateByEmail(string $clientId, string $clientSecret, string $userEmail, bool $isAutoRegister = false)
     {
         return $this->ClientUserAuthenticate($clientId, $clientSecret, 0, $userEmail, $isAutoRegister);
     }
 
-    // As an OAuth client authenticate for given user by userId
+    /**
+     * As an OAuth client authenticate for given user by userId
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $userId
+     * @param bool $isAutoRegister
+     * @return GraphQLOperationMutation
+     */
     public function ClientUserAuthenticateById(string $clientId, string $clientSecret, int $userId, bool $isAutoRegister = false)
     {
         return $this->ClientUserAuthenticate($clientId, $clientSecret, $userId, '', $isAutoRegister);
     }
 
-    // As an OAuth client authenticate for given user
+    /**
+     * As an OAuth client authenticate for given user
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $userId
+     * @param string $userEmail
+     * @param bool $isAutoRegister
+     * @return GraphQLOperationMutation
+     */
     public function ClientUserAuthenticate(string $clientId, string $clientSecret, int $userId, string $userEmail, bool $isAutoRegister = false)
     {
         $args = [
@@ -110,7 +148,14 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // As an OAuth client authenticate update a given user
+    /**
+     * As an OAuth client authenticate update a given user
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $userId
+     * @return GraphQLOperationMutation
+     */
     public function ClientUserUpdate(string $clientId, string $clientSecret, int $userId)
     {
         $args = [
@@ -130,7 +175,15 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // As an OAuth client authenticate update a given user
+    /**
+     * As an OAuth client authenticate update a given user
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param int $userId
+     * @param string $userEmail
+     * @return GraphQLOperationMutation
+     */
     public function ClientUserDelete(string $clientId, string $clientSecret, int $userId, string $userEmail)
     {
         $args = [
@@ -151,7 +204,11 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Purchase an offered subscription, returns a payment_url to which user can be redirected
+    /**
+     * Purchase an offered subscription, returns a payment_url to which user can be redirected
+     *
+     * @return GraphQLOperationMutation
+     */
     public function UserDetailsUpdate()
     {
         return $this->prepareExecution(
@@ -164,7 +221,15 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Purchase an offered subscription, returns a payment_url to which user can be redirected
+    /**
+     * Purchase an offered subscription, returns a payment_url to which user can be redirected
+     *
+     * @param int $paymentProviderId
+     * @param int $subscriptionId
+     * @param string $redirectUrlPath
+     * @param string $voucherCode
+     * @return GraphQLOperationMutation
+     */
     public function UserSubscriptionAcquire(int $paymentProviderId, int $subscriptionId, string $redirectUrlPath = '', string $voucherCode = '')
     {
         $args = [
@@ -190,7 +255,15 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Purchase an offered product, returns a payment_url to which user can be redirected
+    /**
+     * Purchase an offered product, returns a payment_url to which user can be redirected
+     *
+     * @param int $paymentProviderId
+     * @param array $productIds
+     * @param string $redirectUrlPath
+     * @param string $voucherCode
+     * @return GraphQLOperationMutation
+     */
     public function UserProductAcquire(int $paymentProviderId, array $productIds, string $redirectUrlPath = '', string $voucherCode = '')
     {
         $arr = [];
@@ -225,7 +298,16 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Redeem a (stand-alone) voucher code
+    /**
+     * Redeem a (stand-alone) voucher code
+     *
+     * @param string $voucherCode
+     * @param int $paymentProviderId
+     * @param string $redirectUrlPath
+     * @param int|null $subscriptionId
+     * @param int|null $userSubscriptionId
+     * @return GraphQLOperationMutation
+     */
     public function UserPaymentVoucherRedeem(
         string $voucherCode,
         int $paymentProviderId,
@@ -261,7 +343,30 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Complete device pairing by claiming the pairing code displayed in the TV-app
+    /**
+     * Validate a payment order after returning from an external payment provider
+     *
+     * @param int $userPaymentAccountOrderId
+     * @return GraphQLOperationMutation
+     */
+    public function UserPaymentAccountOrderValidate(int $userPaymentAccountOrderId)
+    {
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
+            'UserPaymentAccountOrderValidate',
+            ['id' => $userPaymentAccountOrderId],
+            []
+        );
+    }
+
+    /**
+     * Complete device pairing by claiming the pairing code displayed in the TV-app
+     *
+     * @param string $pairingCode
+     * @return GraphQLOperationMutation
+     */
     public function UserDevicePairingClaim(string $pairingCode)
     {
         return $this->prepareExecution(
@@ -274,7 +379,12 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    // Remove a given claimed device from the list
+    /**
+     * Remove a given claimed device from the list
+     *
+     * @param int $deviceId
+     * @return GraphQLOperationMutation
+     */
     public function UserDevicePairingDelete(int $deviceId)
     {
         return $this->prepareExecution(

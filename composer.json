@@ -12,7 +12,8 @@
     "keywords": [
         "audienceplayer",
         "video",
-        "platform"
+        "platform",
+        "api-client"
     ],
     "require": {
         "ext-curl": "*",

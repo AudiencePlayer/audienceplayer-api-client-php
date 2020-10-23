@@ -53,9 +53,9 @@ Authenticate via the proper mechanism to gain access for a given user (or altern
 ```php    
     # Pre-existing bearerToken that you may have cached for given user    
     $bearerToken = 'eYarTl93Fas3...';
-    # E-mail address of the user for whom you are validating/creating a token
+    # User-ID or E-mail address of the user for whom you are validating/creating a token
     $userEmail = 'info@example.com';
-    # Auto-registers the user if it does not yet exist
+    # When validating with only an e-mail address, the user may be auto-registered if non-existent
     $isAutoRegister = true;
  
     # Compare new token with pre-existing token and update your stored token if necessary 
@@ -64,8 +64,7 @@ Authenticate via the proper mechanism to gain access for a given user (or altern
         $userEmail,
         $userArgs,
         $bearerToken,
-        $isAutoRegister,
-        $isAllowRenewal
+        $isAutoRegister
     );
 ```
 

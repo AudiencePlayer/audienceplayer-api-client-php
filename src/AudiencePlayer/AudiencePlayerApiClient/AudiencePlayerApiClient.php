@@ -332,6 +332,7 @@ class AudiencePlayerApiClient
      * @param bool $isResponseAsObject
      * @param string $operationName
      * @param string $bearerToken
+     * @param string $accessType
      * @return false|mixed|object|string
      */
     public function executeRawGraphQLCall(
@@ -341,9 +342,14 @@ class AudiencePlayerApiClient
         bool $isExecuteAsPostRequest = true,
         bool $isResponseAsObject = true,
         string $operationName = '',
-        string $bearerToken = ''
+        string $bearerToken = '',
+        string $accessType = ''
     )
     {
+        if (empty($bearerToken) && in_array($accessType, Globals::OAUTH_ACCESS_AGENTS)) {
+            $bearerToken = $this->graphQLService->fetchBearerToken($accessType);
+        }
+
         return $this->graphQLService->dispatchGraphQLCall(
             $scope,
             $operation,

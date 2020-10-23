@@ -40,8 +40,8 @@ class Globals
         OAUTH_SCOPE_USER = 'api-user-access',
         OAUTH_SCOPE_ADMIN = 'api-admin-access',
 
-        OAUTH_ACCESS_AS_AGENT_CLIENT = 'access-as-client',
-        OAUTH_ACCESS_AS_AGENT_USER = 'access-as-user',
+        OAUTH_ACCESS_AS_AGENT_CLIENT = 'client',
+        OAUTH_ACCESS_AS_AGENT_USER = 'user',
 
         GRAPHQL_OPERATION_TYPE_MUTATION = 'mutation',
         GRAPHQL_OPERATION_TYPE_QUERY = 'query',
@@ -53,7 +53,8 @@ class Globals
         API_RESPONSE_FORMAT_OBJECT = 'object';
 
     public const
-        OAUTH_SCOPES = [self::OAUTH_SCOPE_ADMIN, self::OAUTH_SCOPE_USER];
+        OAUTH_SCOPES = [self::OAUTH_SCOPE_ADMIN, self::OAUTH_SCOPE_USER],
+        OAUTH_ACCESS_AGENTS = [self::OAUTH_ACCESS_AS_AGENT_CLIENT, self::OAUTH_ACCESS_AS_AGENT_USER];
 
     public const
         STATUS_GENERAL_ERROR = -1,

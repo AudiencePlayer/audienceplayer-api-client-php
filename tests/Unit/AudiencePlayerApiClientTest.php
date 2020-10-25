@@ -361,6 +361,19 @@ class AudiencePlayerApiClientTest extends TestCase
         $this->assertSame($expectedResult, $apiClient->fetchUser(123, 'info@example.com'));
     }
 
+    public function testFetchBearerToken()
+    {
+        $expectedToken = 'eY1234';
+
+        $apiClient = new AudiencePlayerApiClient(
+            $this->createGraphQLService(['methods' => ['fetchBearerToken' => $expectedToken]]),
+            $this->createGraphQLOperationMutation(),
+            $this->createGraphQLOperationQuery()
+        );
+
+        $this->assertSame($expectedToken, $apiClient->fetchBearerToken('foobar'));
+    }
+
     /**
      * @param $isErrorsOnly
      * @param $isStringifyResult

@@ -270,6 +270,15 @@ class AudiencePlayerApiClient
     }
 
     /**
+     * @param string $accessAgentType
+     * @return string
+     */
+    public function fetchBearerToken(string $accessAgentType): string
+    {
+        return $this->graphQLService->fetchBearerToken($accessAgentType);
+    }
+
+    /**
      * @param int $userId
      * @param array $updateArguments
      * @param array $responseProperties

@@ -102,22 +102,21 @@ class GraphQLOperationQuery extends GraphQLOperation
             'UserSubscriptionList',
             [],
             [
-                'items' => [
-                    'id',
-                    'subscription_id',
-                    'suspended_at',
-                    'suspendable_at',
-                    'invoiced_at',
-                    'acquired_at',
-                    'expires_at',
-                    'status',
-                    'status_name',
-                    'is_valid',
-                    'is_expired',
-                    'is_suspendable',
-                    'is_account_method_changeable',
-                ]
-            ]
+                'id',
+                'subscription_id',
+                'suspended_at',
+                'suspendable_at',
+                'invoiced_at',
+                'acquired_at',
+                'expires_at',
+                'status',
+                'status_name',
+                'is_valid',
+                'is_expired',
+                'is_suspendable',
+                'is_account_method_changeable',
+            ],
+            true
         );
     }
 
@@ -135,13 +134,12 @@ class GraphQLOperationQuery extends GraphQLOperation
             'UserProductList',
             [],
             [
-                'items' => [
-                    'id',
-                    'product_id',
-                    'is_fulfilled',
-                    'fulfilment_expires_at',
-                ]
-            ]
+                'id',
+                'product_id',
+                'is_fulfilled',
+                'fulfilment_expires_at',
+            ],
+            true
         );
     }
 
@@ -158,7 +156,8 @@ class GraphQLOperationQuery extends GraphQLOperation
             Globals::GRAPHQL_OPERATION_TYPE_QUERY,
             'DeviceList',
             [],
-            ['items' => ['id', 'name', 'uuid,', 'created_at']]
+            ['id', 'name', 'uuid,', 'created_at'],
+            true
         );
     }
 
@@ -209,16 +208,16 @@ class GraphQLOperationQuery extends GraphQLOperation
             'ArticleList',
             $args,
             [
-                'items{' .
-                'id,' .
-                'name,' .
-                'type,' .
-                'metas(output:html){key,value}' .
-                'categories{id,parent_id}' .
-                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}' .
-                'assets{id,linked_type}' .
-                'products{id,title,call_to_action_tag,price,currency,currency_symbol,expires_in,expires_at}'
-            ]
+                'id',
+                'name',
+                'type',
+                'metas(output:html)' => 'key,value',
+                'categories' => 'id,parent_id',
+                'images' => 'url,base_url,base_path,file_name,file_path,aspect_ratio_profile',
+                'assets' => 'id,linked_type',
+                'products' => 'id,title,call_to_action_tag,price,currency,currency_symbol,expires_in,expires_at'
+            ],
+            true
         );
     }
 
@@ -268,14 +267,13 @@ class GraphQLOperationQuery extends GraphQLOperation
             'CategoryList',
             $args,
             [
-                'items{' .
                 'id,' .
                 'name,' .
                 'type,' .
                 'metas(output:html){key,value}' .
-                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}' .
-                '}'
-            ]
+                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}'
+            ],
+            true
         );
     }
 
@@ -294,21 +292,20 @@ class GraphQLOperationQuery extends GraphQLOperation
             'SubscriptionList',
             ['payment_provider_ids' => $paymentProviderIds],
             [
-                'items{' .
-                'id,' .
-                'title,' .
-                'description,' .
-                'description_short,' .
-                'price,' .
-                'price_per_installment,' .
-                'time_unit,' .
-                'time_unit_translation,' .
-                'frequency,' .
-                'currency,' .
-                'currency_symbol,' .
-                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}' .
-                '}'
-            ]
+                'id',
+                'title',
+                'description',
+                'description_short',
+                'price',
+                'price_per_installment',
+                'time_unit',
+                'time_unit_translation',
+                'frequency',
+                'currency',
+                'currency_symbol',
+                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}',
+            ],
+            true
         );
     }
 
@@ -327,7 +324,6 @@ class GraphQLOperationQuery extends GraphQLOperation
             'ProductList',
             ['payment_provider_ids' => $paymentProviderIds],
             [
-                'items{' .
                 'id,' .
                 'type,' .
                 'title,' .
@@ -339,9 +335,9 @@ class GraphQLOperationQuery extends GraphQLOperation
                 'currency_symbol,' .
                 'expires_in,' .
                 'expires_at,' .
-                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}' .
-                '}'
-            ]
+                'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}'
+            ],
+            true
         );
     }
 

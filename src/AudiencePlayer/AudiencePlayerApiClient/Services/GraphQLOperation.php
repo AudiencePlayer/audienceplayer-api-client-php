@@ -52,6 +52,7 @@ class GraphQLOperation
     protected $scope = '';
     protected $operationType = '';
     protected $operationName = '';
+    protected $isOperationListType = false;
 
     /**
      * GraphQLOperation constructor.
@@ -153,13 +154,20 @@ class GraphQLOperation
      */
     public function execute()
     {
+        $arguments = $this->operationParameters[self::PARAMETER_TYPE_ARGUMENT];
+        $properties = array_merge($this->operationPaginationProperties, $this->operationParameters[self::PARAMETER_TYPE_PROPERTY]);
+
+        if ($this->isOperationListType && !isset($properties['items'])) {
+            $properties = ['items' => $properties];
+        }
+
         $ret = $this->graphQLService->assembleAndDispatchGraphQLCall(
             $this->accessAgentType,
             $this->scope,
             $this->operationType,
             $this->operationName,
-            $this->operationParameters[self::PARAMETER_TYPE_ARGUMENT],
-            array_merge($this->operationPaginationProperties, $this->operationParameters[self::PARAMETER_TYPE_PROPERTY])
+            $arguments,
+            $properties
         );
 
         // Clear all parameters
@@ -178,6 +186,7 @@ class GraphQLOperation
      * @param string $operationName
      * @param array $operationArguments
      * @param array $operationProperties
+     * @param bool $isListedOperation
      * @return $this
      */
     protected function prepareExecution(
@@ -186,13 +195,15 @@ class GraphQLOperation
         string $operationType,
         string $operationName,
         array $operationArguments = [],
-        array $operationProperties = []
+        array $operationProperties = [],
+        bool $isListedOperation = false
     )
     {
         $this->accessAgentType = $accessAgentType;
         $this->scope = $scope;
         $this->operationType = $operationType;
         $this->operationName = $operationName;
+        $this->isOperationListType = $isListedOperation;
 
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, $operationArguments);
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_PROPERTY, $operationProperties);
@@ -233,6 +244,8 @@ class GraphQLOperation
             $this->operationParameters[self::PARAMETER_TYPE_ARGUMENT] = [];
             $this->operationParameters[self::PARAMETER_TYPE_PROPERTY] = [];
         }
+
+        $this->isOperationListType = false;
     }
 
 }

@@ -129,13 +129,13 @@ class GraphQLOperationMutation extends GraphQLOperation
             'project_id' => $this->graphQLService->fetchProjectId(),
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
-            'auto_register' => $isAutoRegister,
         ];
 
         if ($userId) {
             $args['user_id'] = $userId;
         } elseif ($userEmail) {
             $args['user_email'] = $userEmail;
+            $args['auto_register'] = $isAutoRegister;
         }
 
         return $this->prepareExecution(

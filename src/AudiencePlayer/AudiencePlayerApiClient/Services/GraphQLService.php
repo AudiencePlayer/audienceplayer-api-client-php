@@ -449,12 +449,8 @@ class GraphQLService
     {
         array_walk($args, function (&$value, $key) {
 
-            if (is_array($value)) {
-                $type = $value['type'] ?? gettype(reset($value));
-                $value = $value['value'] ?? null;
-            } else {
-                $type = gettype($value);
-            }
+            $type = $value['type'] ?? gettype($value);
+            $value = $value['value'] ?? $value;
 
             switch (strtolower($type)) {
 

@@ -151,8 +151,8 @@ class AudiencePlayerApiClient
                 $this->graphQLService->fetchProjectId()
             )->execute();
 
-            if (isset($result->data->access_token)) {
-                $ret = $this->graphQLService->setBearerToken($result->data->access_token, Globals::OAUTH_ACCESS_AS_AGENT_CLIENT);
+            if (isset($result->getData(true)->access_token)) {
+                $ret = $this->graphQLService->setBearerToken($result->getData(true)->access_token, Globals::OAUTH_ACCESS_AS_AGENT_CLIENT);
             }
         }
 
@@ -202,12 +202,12 @@ class AudiencePlayerApiClient
                     $userId,
                     false
                 )
-                    ->arguments(['user_email' => $userEmail])
+                    ->arguments(trim($userEmail) ? ['user_email' => $userEmail] : [])
                     ->execute();
 
-                if (isset($result->data->access_token)) {
-                    $ret = array_merge($ret, (array)$result->data);
-                    $ret['access_token'] = $this->graphQLService->setBearerToken($result->data->access_token, Globals::OAUTH_ACCESS_AS_AGENT_USER);
+                if (isset($result->getData(true)->access_token)) {
+                    $ret = array_merge($ret, (array)$result->getData(true));
+                    $ret['access_token'] = $this->graphQLService->setBearerToken($result->getData(true)->access_token, Globals::OAUTH_ACCESS_AS_AGENT_USER);
                 } elseif ($result->getFirstErrorCode() !== 404) {
                     // There was an error other than "user not found", ensure script flow is terminated
                     $userEmail = null;
@@ -239,9 +239,9 @@ class AudiencePlayerApiClient
                     ->arguments($args)
                     ->execute();
 
-                if (isset($result->data->access_token)) {
-                    $ret = array_merge($ret, (array)$result->data);
-                    $ret['access_token'] = $this->graphQLService->setBearerToken($result->data->access_token, Globals::OAUTH_ACCESS_AS_AGENT_USER);
+                if (isset($result->getData(true)->access_token)) {
+                    $ret = array_merge($ret, (array)$result->getData(true));
+                    $ret['access_token'] = $this->graphQLService->setBearerToken($result->getData(true)->access_token, Globals::OAUTH_ACCESS_AS_AGENT_USER);
                 }
             }
         }

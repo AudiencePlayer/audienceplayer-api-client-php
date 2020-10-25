@@ -41,7 +41,7 @@ class GraphQLServiceTest extends TestCase
 
         $this->assertTrue(get_class($result) === ApiResponse::class);
 
-        $this->assertSame($expectedDataResult, $result->data);
+        $this->assertSame($expectedDataResult, $result->getData(true));
 
         if ($expectedErrorCode === Globals::STATUS_GENERAL_OK) {
             $this->assertFalse($result->hasErrors());
@@ -462,6 +462,7 @@ class GraphQLServiceTest extends TestCase
             [['lorem' => 7.99], true, '(lorem:7.99)'],
             [['lorem' => 'ipsum'], true, '(lorem:"ipsum")',],
             [['lorem' => 'ipsum'], false, 'lorem:"ipsum"',],
+            [['lorem' => [1, 2]], false, 'lorem:[1,2]',],
             [['lorem' => ['value' => 'ipsum', 'type' => 'string']], true, '(lorem:"ipsum")'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'enum']], true, '(lorem:ipsum)'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'bool']], true, '(lorem:true)'],

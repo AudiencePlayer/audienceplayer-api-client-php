@@ -39,7 +39,7 @@ use Exception;
 
 class ApiResponse
 {
-    public
+    protected
         $data,
         $errors = [];
 
@@ -121,9 +121,7 @@ class ApiResponse
 
         // set data property (if applicable)
         if (property_exists($this->parsedInputResult, 'data')) {
-
-            $this->data = ($operationName && isset($this->parsedInputResult->data->{$operationName})) ?
-                $this->parsedInputResult->data->{$operationName} : $this->parsedInputResult->data;
+            $this->data = $this->parsedInputResult->data;
         }
 
         // set errors property (if applicable)
@@ -135,11 +133,13 @@ class ApiResponse
     }
 
     /**
-     * @return null
+     * @param bool $isFlattenOperationName
+     * @return mixed
      */
-    public function getData()
+    public function getData(bool $isFlattenOperationName = false)
     {
-        return $this->data;
+        return ($isFlattenOperationName && $this->operationName && isset($this->data->{$this->operationName})) ?
+            $this->parsedInputResult->data->{$this->operationName} : $this->data;
     }
 
     /**

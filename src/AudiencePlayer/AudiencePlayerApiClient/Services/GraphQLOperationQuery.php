@@ -310,6 +310,35 @@ class GraphQLOperationQuery extends GraphQLOperation
     }
 
     /**
+     * Fetch details of given product
+     * @param int $productId
+     * @return GraphQLOperationQuery
+     */
+    public function Product(int $productId)
+    {
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_QUERY,
+            'Product',
+            ['id' => $productId],
+            [
+                'id',
+                'name',
+                'type',
+                'title',
+                'description',
+                'description_short',
+                'call_to_action_tag',
+                'price',
+                'currency',
+                'currency_symbol',
+                'images' => 'url,base_url,base_path,file_name,file_path,aspect_ratio_profile',
+            ]
+        );
+    }
+
+    /**
      * Fetch list of offered products
      *
      * @param array $paymentProviderIds

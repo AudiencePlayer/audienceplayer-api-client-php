@@ -311,6 +311,7 @@ class GraphQLOperationQuery extends GraphQLOperation
 
     /**
      * Fetch details of given product
+     *
      * @param int $productId
      * @return GraphQLOperationQuery
      */
@@ -367,6 +368,40 @@ class GraphQLOperationQuery extends GraphQLOperation
                 'images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}'
             ],
             true
+        );
+    }
+
+    /**
+     * Fetch details of given page
+     *
+     * @param $pageId
+     * @return GraphQLOperationQuery
+     */
+    public function Page($pageId)
+    {
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_QUERY,
+            'Page',
+            ['id' => $pageId],
+            [
+                'id',
+                'name',
+                'full_url_slug',
+                'type',
+                'title',
+                'components {
+                    id title content url value
+                    elements {
+                        id title content url value                    
+                        images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}
+                        posters{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}
+                    }
+                    images{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}
+                    posters{url,base_url,base_path,file_name,file_path,aspect_ratio_profile}
+                }',
+            ]
         );
     }
 

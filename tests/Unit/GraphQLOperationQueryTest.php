@@ -25,6 +25,7 @@ class GraphQLOperationQueryTest extends TestCase
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->SubscriptionList([1])));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Product(1)));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ProductList([1])));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Page(1)));
     }
 
 }

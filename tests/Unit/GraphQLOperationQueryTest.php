@@ -16,6 +16,7 @@ class GraphQLOperationQueryTest extends TestCase
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->UserSubscriptionList()));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->UserProductList()));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->DeviceList()));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientPayloadVerify('1', '1', 'foobar')));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientUser('1', '1', 1)));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientUser('1', '1', 0, 'info@exmaple.com')));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Article(1)));

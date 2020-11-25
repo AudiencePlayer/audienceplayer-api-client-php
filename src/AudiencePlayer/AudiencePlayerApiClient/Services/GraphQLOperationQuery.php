@@ -39,6 +39,33 @@ use AudiencePlayer\AudiencePlayerApiClient\Resources\Globals;
 class GraphQLOperationQuery extends GraphQLOperation
 {
     /**
+     * As an OAuth client verify a payload
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $payload
+     * @return mixed
+     */
+    public function ClientPayloadVerify(string $clientId, string $clientSecret, string $payload)
+    {
+        $args = [
+            'project_id' => $this->graphQLService->fetchProjectId(),
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'payload' => $payload,
+        ];
+
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_QUERY,
+            'ClientPayloadVerify',
+            $args,
+            ['payload', 'status']
+        );
+    }
+
+    /**
      * As an OAuth client query a user
      *
      * @param string $clientId

@@ -155,11 +155,13 @@ class GraphQLOperation
     public function execute()
     {
         $arguments = $this->operationParameters[self::PARAMETER_TYPE_ARGUMENT];
-        $properties = array_merge($this->operationPaginationProperties, $this->operationParameters[self::PARAMETER_TYPE_PROPERTY]);
+        $properties = $this->operationParameters[self::PARAMETER_TYPE_PROPERTY];
 
         if ($this->isOperationListType && !isset($properties['items'])) {
             $properties = ['items' => $properties];
         }
+
+        $properties = array_merge($this->operationPaginationProperties, $properties);
 
         $ret = $this->graphQLService->assembleAndDispatchGraphQLCall(
             $this->accessAgentType,

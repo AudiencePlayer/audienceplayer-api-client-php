@@ -204,6 +204,21 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
+    public function UserAuthenticate(string $email, string $password)
+    {
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
+            'UserAuthenticate',
+            [
+                'email' => $email,
+                'password' => $password,
+            ],
+            ['access_token', 'user_id', 'user_email', 'expires_in']
+        );
+    }
+
     /**
      * Purchase an offered subscription, returns a payment_url to which user can be redirected
      *

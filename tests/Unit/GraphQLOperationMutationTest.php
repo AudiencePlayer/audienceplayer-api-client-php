@@ -22,6 +22,7 @@ class GraphQLOperationMutationTest extends TestCase
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->ClientUserAuthenticateById('1', '1', 1, true)));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->ClientUserDelete('1', '1', 1, 'info@example.com')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->ClientUserUpdate('1', '1', 1)));
+        $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserAuthenticate('info@example.com', '12345678')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserDetailsUpdate()));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserSubscriptionAcquire(1, 1, '/home', 'FOOBAR')));
         $this->assertSame(GraphQLOperationMutation::class, get_class($graphQLOperationMutation->UserProductAcquire(1, [1, 2, 3], '/home', 'FOOBAR')));

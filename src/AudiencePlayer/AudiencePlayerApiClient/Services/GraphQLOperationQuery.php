@@ -192,22 +192,31 @@ class GraphQLOperationQuery extends GraphQLOperation
      * Fetch details of given Article
      *
      * @param int $articleId
+     * @param string $articleUrlSlug
      * @return GraphQLOperationQuery
      */
-    public function Article(int $articleId)
+    public function Article(int $articleId, string $articleUrlSlug = '')
     {
+        $args = [];
+
+        if ($articleUrlSlug) {
+            $args['url_slug'] = $articleUrlSlug;
+        } else {
+            $args['id'] = $articleId;
+        }
+
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
             Globals::OAUTH_SCOPE_USER,
             Globals::GRAPHQL_OPERATION_TYPE_QUERY,
             'Article',
-            ['id' => $articleId],
+            $args,
             [
                 'id',
                 'name',
                 'type',
                 'metas(output:html)' => 'key,value',
-                'categories' => 'id,parent_id',
+                'categories' => 'id,parent_id,metas(output:html){key,value}',
                 'images' => 'url,base_url,base_path,file_name,file_path,aspect_ratio_profile',
                 'assets' => 'id,linked_type',
             ]
@@ -239,7 +248,7 @@ class GraphQLOperationQuery extends GraphQLOperation
                 'name',
                 'type',
                 'metas(output:html)' => 'key,value',
-                'categories' => 'id,parent_id',
+                'categories' => 'id,parent_id,metas(output:html){key,value}',
                 'images' => 'url,base_url,base_path,file_name,file_path,aspect_ratio_profile',
                 'assets' => 'id,linked_type',
                 'products' => 'id,title,call_to_action_tag,price,currency,currency_symbol,expires_in,expires_at'
@@ -253,16 +262,25 @@ class GraphQLOperationQuery extends GraphQLOperation
      * Fetch details of given Category
      *
      * @param int $categoryId
+     * @param string $categoryUrlSlug
      * @return GraphQLOperationQuery
      */
-    public function Category(int $categoryId)
+    public function Category(int $categoryId, string $categoryUrlSlug = '')
     {
+        $args = [];
+
+        if ($categoryUrlSlug) {
+            $args['url_slug'] = $categoryUrlSlug;
+        } else {
+            $args['id'] = $categoryId;
+        }
+
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
             Globals::OAUTH_SCOPE_USER,
             Globals::GRAPHQL_OPERATION_TYPE_QUERY,
             'Category',
-            ['id' => $categoryId],
+            $args,
             [
                 'id',
                 'name',

@@ -19,9 +19,11 @@ class GraphQLOperationQueryTest extends TestCase
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientPayloadVerify('1', '1', 'foobar')));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientUser('1', '1', 1)));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ClientUser('1', '1', 0, 'info@exmaple.com')));
-        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Article(1)));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Article(1, '')));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Article(0, 'foobar')));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->ArticleList(1)));
-        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Category(1)));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Category(1, '')));
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Category(0, 'foobar')));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->CategoryList(1)));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->SubscriptionList([1])));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Product(1)));

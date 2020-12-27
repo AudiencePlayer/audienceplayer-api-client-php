@@ -87,7 +87,8 @@ class AudiencePlayerApiClient
         string $oauthClientId,
         string $oauthClientSecret,
         int $projectId,
-        string $apiBaseUrl
+        string $apiBaseUrl,
+        string $locale = 'en'
     )
     {
         if (!self::$instance) {
@@ -102,6 +103,7 @@ class AudiencePlayerApiClient
         }
 
         self::$instance->hydrateConfig($oauthClientId, $oauthClientSecret, $projectId, $apiBaseUrl);
+        self::$instance->hydrateLocale($locale);
 
         return self::$instance;
     }

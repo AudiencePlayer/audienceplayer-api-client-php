@@ -146,6 +146,10 @@ class GraphQLService
                 ],
             ];
 
+            if ($this->locale) {
+                array_push($options['CURLOPT_HTTPHEADER'], 'Accept-Language: ' . $this->locale);
+            }
+
             if ($bearerToken) {
                 array_push($options['CURLOPT_HTTPHEADER'], 'Authorization: Bearer ' . $bearerToken);
             }
@@ -390,7 +394,7 @@ class GraphQLService
      */
     public function setLocale(string $locale)
     {
-        return $this->locale = $locale;
+        return $this->locale = trim($locale);
     }
 
     /**

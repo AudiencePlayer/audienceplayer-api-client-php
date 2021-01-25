@@ -454,6 +454,7 @@ class GraphQLServiceTest extends TestCase
 
     public function parseGraphQLArgsFromArrayDataProvider()
     {
+        // $args, $withParentheses, $expectedResult
         return [
             [[], true, '',],
             [[], false, '',],
@@ -467,6 +468,13 @@ class GraphQLServiceTest extends TestCase
             [['lorem' => ['value' => 'ipsum', 'type' => 'enum']], true, '(lorem:ipsum)'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'bool']], true, '(lorem:true)'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'boolean']], true, '(lorem:true)'],
+            [['lorem' => ['value' => 'true', 'type' => 'boolean']], true, '(lorem:true)'],
+            [['lorem' => ['value' => '1', 'type' => 'boolean']], true, '(lorem:true)'],
+            [['lorem' => ['value' => 1, 'type' => 'boolean']], true, '(lorem:true)'],
+            [['lorem' => ['value' => 'false', 'type' => 'boolean']], true, '(lorem:false)'],
+            [['lorem' => ['value' => ' 0 ', 'type' => 'boolean']], true, '(lorem:false)'],
+            [['lorem' => ['value' => 0, 'type' => 'boolean']], true, '(lorem:false)'],
+            [['lorem' => ['value' => '', 'type' => 'boolean']], true, '(lorem:false)'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'null']], true, '(lorem:null)'],
             [['lorem' => ['value' => 'ipsum', 'type' => 'null']], true, '(lorem:null)'],
             [['lorem' => ['value' => '[1,2,3]', 'type' => 'array']], true, '(lorem:[1,2,3])'],

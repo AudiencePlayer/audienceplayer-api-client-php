@@ -12,7 +12,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
@@ -464,7 +464,7 @@ class GraphQLService
 
                 case 'boolean':
                 case 'bool':
-                    $value = $key . ':' . ($value ? 'true' : 'false');
+                    $value = $key . ':' . (boolval(is_string($value) ? trim(preg_replace('/^(false)$/i', '0', $value)) : $value) ? 'true' : 'false');
                     break;
 
                 case 'null':

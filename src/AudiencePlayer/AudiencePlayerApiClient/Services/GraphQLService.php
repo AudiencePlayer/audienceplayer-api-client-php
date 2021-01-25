@@ -464,7 +464,7 @@ class GraphQLService
 
                 case 'boolean':
                 case 'bool':
-                    $value = $key . ':' . ($value ? 'true' : 'false');
+                    $value = $key . ':' . (boolval(is_string($value) ? trim(preg_replace('/^(false)$/i', '0', $value)) : $value) ? 'true' : 'false');
                     break;
 
                 case 'null':

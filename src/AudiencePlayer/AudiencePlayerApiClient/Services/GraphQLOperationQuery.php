@@ -65,6 +65,33 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
+    public function Config(string $platformContext = 'web', string $operatorContext = 'web')
+    {
+        $args = [
+            'platform_context' => [
+                'type' => 'enum',
+                'value' => Globals::PLATFORM_CONTEXTS[$platformContext] ?? 'web',
+            ],
+            'operator_context' => [
+                'type' => 'enum',
+                'value' => Globals::OPERATOR_CONTEXTS[$operatorContext] ?? 'web',
+            ],
+        ];
+
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_QUERY,
+            'Config',
+            $args,
+            [
+                'project_id',
+                'platform {chromecast_receiver_app_id}',
+                'language_tags{key,value}',
+            ]
+        );
+    }
+
     /**
      * As an OAuth client query a user
      *

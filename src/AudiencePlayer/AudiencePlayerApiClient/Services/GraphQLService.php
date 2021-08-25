@@ -408,8 +408,7 @@ class GraphQLService
     /**
      * @param string $operation
      * @param array $variables
-     * @param mixed $result
-     * @return string
+     * @param $result
      */
     public function setLastOperation(string $operation, array $variables, $result)
     {

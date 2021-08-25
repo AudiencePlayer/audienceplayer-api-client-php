@@ -50,11 +50,47 @@ class Globals
         GRAPHQL_OPERATION_SORT_DIRECTION_DESC = 'desc',
 
         API_RESPONSE_FORMAT_JSON = 'json',
-        API_RESPONSE_FORMAT_OBJECT = 'object';
+        API_RESPONSE_FORMAT_OBJECT = 'object',
+
+        PLATFORM_CONTEXT_WEB = 'web',
+        PLATFORM_CONTEXT_MOBILE = 'mobile',
+        PLATFORM_CONTEXT_TV = 'tv',
+        PLATFORM_CONTEXT_METROLOGICAL = 'metrological',
+
+        OPERATOR_CONTEXT_WEB = 'web',
+        OPERATOR_CONTEXT_ANDROID = 'android',
+        OPERATOR_CONTEXT_IOS = 'ios',
+        OPERATOR_CONTEXT_METROLOGICAL = 'metrological',
+        OPERATOR_CONTEXT_KPN = 'kpn',
+        OPERATOR_CONTEXT_CAIWAY = 'caiway',
+        OPERATOR_CONTEXT_DELTA = 'delta',
+        OPERATOR_CONTEXT_XS4ALL = 'xs4all',
+        OPERATOR_CONTEXT_HORIZON = 'horizon',
+        OPERATOR_CONTEXT_ZIGGO = 'ziggo';
 
     public const
         OAUTH_SCOPES = [self::OAUTH_SCOPE_ADMIN, self::OAUTH_SCOPE_USER],
         OAUTH_ACCESS_AGENTS = [self::OAUTH_ACCESS_AS_AGENT_CLIENT, self::OAUTH_ACCESS_AS_AGENT_USER];
+
+    public const PLATFORM_CONTEXTS = [
+        self::PLATFORM_CONTEXT_WEB,
+        self::PLATFORM_CONTEXT_MOBILE,
+        self::PLATFORM_CONTEXT_TV,
+        self::PLATFORM_CONTEXT_METROLOGICAL,
+    ];
+
+    public const OPERATOR_CONTEXTS = [
+        self::OPERATOR_CONTEXT_WEB,
+        self::OPERATOR_CONTEXT_ANDROID,
+        self::OPERATOR_CONTEXT_IOS,
+        self::OPERATOR_CONTEXT_METROLOGICAL,
+        self::OPERATOR_CONTEXT_KPN,
+        self::OPERATOR_CONTEXT_CAIWAY,
+        self::OPERATOR_CONTEXT_DELTA,
+        self::OPERATOR_CONTEXT_XS4ALL,
+        self::OPERATOR_CONTEXT_HORIZON,
+        self::OPERATOR_CONTEXT_ZIGGO,
+    ];
 
     public const
         STATUS_GENERAL_ERROR = -1,

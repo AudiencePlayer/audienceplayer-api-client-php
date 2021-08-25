@@ -80,6 +80,7 @@ class AudiencePlayerApiClient
      * @param string $oauthClientSecret
      * @param int $projectId
      * @param string $apiBaseUrl
+     * @param string $locale
      * @return AudiencePlayerApiClient
      * @throws Exceptions\CustomException
      */

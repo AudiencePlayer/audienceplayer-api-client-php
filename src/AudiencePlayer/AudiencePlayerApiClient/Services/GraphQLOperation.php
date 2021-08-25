@@ -174,7 +174,6 @@ class GraphQLOperation
 
         // Clear all parameters
         $this->prepareExecution('', '', '', '');
-        $this->clearOperationParameters();
 
         return $ret;
     }
@@ -207,6 +206,7 @@ class GraphQLOperation
         $this->operationName = $operationName;
         $this->isOperationListType = $isListedOperation;
 
+        $this->clearOperationParameters();
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, $operationArguments);
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_PROPERTY, $operationProperties);
 

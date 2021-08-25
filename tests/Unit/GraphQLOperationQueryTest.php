@@ -12,6 +12,7 @@ class GraphQLOperationQueryTest extends TestCase
     public function testMethodResponseObjects()
     {
         $graphQLOperationQuery = $this->createGraphQLOperationQuery();
+        $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->Config()));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->UserDetails()));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->UserSubscriptionList()));
         $this->assertSame(GraphQLOperationQuery::class, get_class($graphQLOperationQuery->UserProductList()));

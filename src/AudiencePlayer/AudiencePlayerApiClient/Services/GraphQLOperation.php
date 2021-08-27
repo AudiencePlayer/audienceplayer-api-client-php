@@ -200,13 +200,15 @@ class GraphQLOperation
         bool $isListedOperation = false
     )
     {
+        // First clear any hydrated operation parameters to prepare for new operation
+        $this->clearOperationParameters();
+
         $this->accessAgentType = $accessAgentType;
         $this->scope = $scope;
         $this->operationType = $operationType;
         $this->operationName = $operationName;
         $this->isOperationListType = $isListedOperation;
 
-        $this->clearOperationParameters();
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, $operationArguments);
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_PROPERTY, $operationProperties);
 

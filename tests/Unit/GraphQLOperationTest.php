@@ -92,13 +92,19 @@ class GraphQLOperationTest extends TestCase
 
         $this->createGraphQLOperation();
 
+        // Ensure protected operation options are properly handled
+        $this->assertFalse($this->accessProtectedProperty($this->graphQLOperation, 'isOperationListType'));
+        $this->setProtectedProperty($this->graphQLOperation, 'isOperationListType', true);
+
         $this->graphQLOperation->locale('en')->properties(['id']);
         $operationParameters = $this->accessProtectedProperty($this->graphQLOperation, 'operationParameters');
         $this->assertNotEmpty($operationParameters['argument']);
         $this->assertNotEmpty($operationParameters['property']);
 
+        $this->assertTrue($this->accessProtectedProperty($this->graphQLOperation, 'isOperationListType'));
         $result = $this->graphQLOperation->execute();
         $this->assertSame($apiResponse, $result);
+        $this->assertFalse($this->accessProtectedProperty($this->graphQLOperation, 'isOperationListType'));
 
         $operationParameters = $this->accessProtectedProperty($this->graphQLOperation, 'operationParameters');
         $this->assertEmpty($operationParameters['argument']);

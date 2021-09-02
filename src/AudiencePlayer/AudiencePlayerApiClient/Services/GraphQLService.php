@@ -451,46 +451,7 @@ class GraphQLService
     protected function parseGraphQLArgsFromArray(array $args, $withParentheses = true): string
     {
         array_walk($args, function (&$value, $key) {
-
-            $type = $value['type'] ?? gettype($value);
-            $value = $value['value'] ?? $value;
-
-            switch (strtolower($type)) {
-
-                case 'string':
-                    $value = $key . ':"' . $this->helper->escapeString(strval($value)) . '"';
-                    break;
-
-                case 'boolean':
-                case 'bool':
-                    $value = $key . ':' . (boolval(is_string($value) ? trim(preg_replace('/^(false)$/i', '0', $value)) : $value) ? 'true' : 'false');
-                    break;
-
-                case 'null':
-                    $value = $key . ':null';
-                    break;
-
-                case 'array':
-                    if (is_array($value)) {
-
-                        if ($this->helper->hasArrayOnlyIntegers($value)) {
-                            $arr = $value;
-                        } else {
-                            $arr = array_map(function ($item) {
-                                return '"' . $item . '"';
-                            }, $value);
-                        }
-
-                        $value = '[' . implode(',', $arr) . ']';
-                    }
-
-                    $value = $key . ':' . $value;
-                    break;
-
-                default:
-                    $value = $key . ':' . $value;
-                    break;
-            }
+            $value = $this->helper->parseSingleGraphQLArgument($value, $key);
         });
 
         if ($args) {

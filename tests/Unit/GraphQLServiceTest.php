@@ -479,8 +479,8 @@ class GraphQLServiceTest extends TestCase
             [['lorem' => ['value' => 'ipsum', 'type' => 'null']], true, '(lorem:null)'],
             [['lorem' => ['value' => '[1,2,3]', 'type' => 'array']], true, '(lorem:[1,2,3])'],
             [['lorem' => ['value' => [1, 2, 3], 'type' => 'array']], true, '(lorem:[1,2,3])'],
-            [['lorem' => ['value' => [1, '2', 3], 'type' => 'array']], true, '(lorem:["1","2","3"])'],
-            [['price' => 7.99, 'lorem' => ['value' => [1, '2', 3], 'type' => 'array'], 'foo' => 'bar'], true, '(price:7.99,lorem:["1","2","3"],foo:"bar")'],
+            [['lorem' => ['value' => [1, '2', 3], 'type' => 'array']], true, '(lorem:[1,"2",3])'],
+            [['price' => 7.99, 'lorem' => ['value' => [1, '2', 3], 'type' => 'array'], 'foo' => 'bar'], true, '(price:7.99,lorem:[1,"2",3],foo:"bar")'],
         ];
     }
 

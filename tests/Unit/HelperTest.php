@@ -72,6 +72,51 @@ class HelperTest extends TestCase
         $this->assertEquals(1, $result[CURLOPT_POST]);
         $this->assertEquals($options['CURLOPT_POSTFIELDS'], $result[CURLOPT_POSTFIELDS]);
     }
+
+    /**
+     * @dataProvider parseSingleGraphQLArgumentDataProvider
+     * @param $key
+     * @param $value
+     * @param $expectedResult
+     */
+    public function testParseSingleGraphQLArgument($key, $value, $expectedResult)
+    {
+        $helper = new Helper();
+        $this->assertEquals($expectedResult, $helper->parseSingleGraphQLArgument($value, $key));
+    }
+
+    public function parseSingleGraphQLArgumentDataProvider()
+    {
+        // $key, $value, $expectedResult
+        return [
+            ['', '', '""'],
+            ['', [], '[]'],
+            ['lorem', [], 'lorem:[]'],
+            ['', 1, '1'],
+            ['lorem', 1, 'lorem:1'],
+            ['lorem', 7.99, 'lorem:7.99'],
+            ['lorem', 'ipsum', 'lorem:"ipsum"'],
+            ['lorem', [1, 2], 'lorem:[1,2]'],
+            ['lorem', ['value' => 'ipsum', 'type' => 'string'], 'lorem:"ipsum"'],
+            ['lorem', ['value' => 'ipsum', 'type' => 'enum'], 'lorem:ipsum'],
+            ['lorem', ['value' => 'ipsum', 'type' => 'bool'], 'lorem:true'],
+            ['lorem', ['value' => 'ipsum', 'type' => 'boolean'], 'lorem:true'],
+            ['lorem', ['value' => 'true', 'type' => 'boolean'], 'lorem:true'],
+            ['lorem', ['value' => '1', 'type' => 'boolean'], 'lorem:true'],
+            ['lorem', ['value' => 1, 'type' => 'boolean'], 'lorem:true'],
+            ['lorem', ['value' => 'false', 'type' => 'boolean'], 'lorem:false'],
+            ['lorem', ['value' => ' 0 ', 'type' => 'boolean'], 'lorem:false'],
+            ['lorem', ['value' => 0, 'type' => 'boolean'], 'lorem:false'],
+            ['lorem', ['value' => '', 'type' => 'boolean'], 'lorem:false'],
+            ['lorem', ['value' => 'ipsum', 'type' => 'null'], 'lorem:null'],
+            ['lorem', ['value' => '[1,2,3]', 'type' => 'array'], 'lorem:[1,2,3]'],
+            ['lorem', ['value' => [1, 2, 3], 'type' => 'array'], 'lorem:[1,2,3]'],
+            ['lorem', ['value' => [1, '2', 3], 'type' => 'array'], 'lorem:[1,"2",3]'],
+            ['lorem', [['value' => [1, 3], 'type' => 'array'], 'bar', ['value' => 'web', 'type' => 'enum']], 'lorem:[[1,3],"bar",web]'],
+            ['lorem', ['value' => '[web,mobile]', 'type' => 'enum'], 'lorem:[web,mobile]'],
+        ];
+    }
+
 }
 
 

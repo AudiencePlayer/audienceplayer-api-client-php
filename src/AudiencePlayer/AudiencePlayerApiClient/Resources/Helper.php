@@ -92,6 +92,50 @@ class Helper
         return $s;
     }
 
+    public function parseSingleGraphQLArgument($value, $key = null): string
+    {
+        $type = $value['type'] ?? gettype($value);
+        $value = $value['value'] ?? $value;
+
+        switch (strtolower($type)) {
+
+            case 'string':
+                $value = '"' . $this->escapeString(strval($value)) . '"';
+                break;
+
+            case 'boolean':
+            case 'bool':
+                $value = boolval(is_string($value) ? trim(preg_replace('/^(false)$/i', '0', $value)) : $value) ? 'true' : 'false';
+                break;
+
+            case 'null':
+                $value = 'null';
+                break;
+
+            case 'array':
+                if (is_array($value)) {
+
+                    if ($this->hasArrayOnlyIntegers($value)) {
+                        $arr = $value;
+                    } else {
+                        $self = $this;
+                        $arr = array_map(function ($item) use ($self) {
+                            return $self->parseSingleGraphQLArgument($item);
+                        }, $value);
+                    }
+
+                    $value = '[' . implode(',', $arr) . ']';
+                }
+                break;
+
+            default:
+                $value = strval($value);
+                break;
+        }
+
+        return $key ? $key . ':' . $value : $value;
+    }
+
     // ### INTERNAL HELPERS ###
 
     /**

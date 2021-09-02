@@ -52,6 +52,13 @@ class Globals
         API_RESPONSE_FORMAT_JSON = 'json',
         API_RESPONSE_FORMAT_OBJECT = 'object',
 
+        ARTICLE_TYPE_EPISODE = 'episode',
+        ARTICLE_TYPE_FILM = 'film',
+        ARTICLE_TYPE_SEASON = 'season',
+        ARTICLE_TYPE_SERIES = 'series',
+        ARTICLE_TYPE_TEXT = 'text',
+        ARTICLE_TYPE_VIDEO = 'video',
+
         PLATFORM_CONTEXT_WEB = 'web',
         PLATFORM_CONTEXT_MOBILE = 'mobile',
         PLATFORM_CONTEXT_TV = 'tv',

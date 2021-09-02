@@ -65,16 +65,16 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    public function Config(string $platformContext = 'web', string $operatorContext = 'web')
+    public function Config(string $platformContext = Globals::PLATFORM_CONTEXT_WEB, string $operatorContext = Globals::OPERATOR_CONTEXT_WEB)
     {
         $args = [
             'platform_context' => [
                 'type' => 'enum',
-                'value' => Globals::PLATFORM_CONTEXTS[$platformContext] ?? 'web',
+                'value' => Globals::PLATFORM_CONTEXTS[$platformContext] ?? Globals::PLATFORM_CONTEXT_WEB,
             ],
             'operator_context' => [
                 'type' => 'enum',
-                'value' => Globals::OPERATOR_CONTEXTS[$operatorContext] ?? 'web',
+                'value' => Globals::OPERATOR_CONTEXTS[$operatorContext] ?? Globals::OPERATOR_CONTEXT_WEB,
             ],
         ];
 
@@ -254,14 +254,26 @@ class GraphQLOperationQuery extends GraphQLOperation
      * Fetch list of Articles
      *
      * @param int|null $categoryId
+     * @param array $types
      * @return GraphQLOperationQuery
      */
-    public function ArticleList(int $categoryId = null)
+    public function ArticleList(int $categoryId = null, array $types = [])
     {
         $args = [];
 
         if ($categoryId) {
             $args['category_id'] = $categoryId;
+        }
+
+        if ($types) {
+            $args['types'] = [];
+            foreach ($types as $type) {
+                if (is_string($type)) {
+                    array_push($args['types'], ['type' => 'enum', 'value' => $type]);
+                } else {
+                    array_push($args['types'], $type);
+                }
+            }
         }
 
         return $this->prepareExecution(

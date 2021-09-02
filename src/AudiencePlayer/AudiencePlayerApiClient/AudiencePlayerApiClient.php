@@ -319,6 +319,14 @@ class AudiencePlayerApiClient
     }
 
     /**
+     * @return mixed|string
+     */
+    public function fetchLastOperationQuery()
+    {
+        return $this->graphQLService->fetchLastOperationQuery();
+    }
+
+    /**
      * @param bool $isErrorsOnly
      * @param bool $isStringifyResult
      * @return mixed|string

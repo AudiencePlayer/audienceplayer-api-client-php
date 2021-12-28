@@ -38,6 +38,7 @@ class HelperTest extends TestCase
         //$this->fetchClassMock(Helper::class, ['execCurl' => '<CURL_RESULT>'], [], true);
 
         $url = 'https://example.org';
+        $forwardForIp = '123.123.123.123';
 
         $options = [
             'CURLOPT_HEADER' => true,
@@ -57,11 +58,11 @@ class HelperTest extends TestCase
 
         ];
 
-        $result = $this->accessProtectedMethod($helper, 'prepareCurlRequest', [$url, $options]);
+        $result = $this->accessProtectedMethod($helper, 'prepareCurlRequest', [$url, $options, $forwardForIp]);
 
         $this->assertEquals($url, $result[CURLOPT_URL]);
         $this->assertEquals($options['CURLOPT_HEADER'], $result[CURLOPT_HEADER]);
-        $this->assertEquals($options['CURLOPT_HTTPHEADER'], $result[CURLOPT_HTTPHEADER]);
+        $this->assertEquals(array_merge($options['CURLOPT_HTTPHEADER'], ['X-Forwarded-For: ' . $forwardForIp]), $result[CURLOPT_HTTPHEADER]);
         $this->assertEquals(false, $result[CURLOPT_SSL_VERIFYPEER]);
         $this->assertEquals(true, $result[CURLOPT_RETURNTRANSFER]);
         $this->assertEquals(30, $result[CURLOPT_CONNECTTIMEOUT]);

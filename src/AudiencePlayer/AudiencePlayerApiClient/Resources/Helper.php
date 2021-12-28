@@ -74,13 +74,14 @@ class Helper
      * @codeCoverageIgnore
      * @param $url
      * @param array $options
+     * @param string $forwardForIp
      * @return mixed
      */
-    public function dispatchCurlCall($url, array $options = [])
+    public function dispatchCurlCall($url, array $options = [], string $forwardForIp = '')
     {
         $ch = curl_init();
 
-        $curlOptions = $this->prepareCurlRequest($url, $options);
+        $curlOptions = $this->prepareCurlRequest($url, $options, $forwardForIp);
 
         foreach ($curlOptions as $option => $value) {
             curl_setopt($ch, $option, $value);
@@ -141,12 +142,17 @@ class Helper
     /**
      * @param $url
      * @param array $options
+     * @param string $forwardForIp
      * @return array
      */
-    protected function prepareCurlRequest($url, array $options = [])
+    protected function prepareCurlRequest($url, array $options = [], string $forwardForIp = '')
     {
-        $curlOptions = [
+        if (trim($forwardForIp)) {
+            $arrHeaders = ['X-Forwarded-For: ' . trim($forwardForIp)];
+            $options['CURLOPT_HTTPHEADER'] = isset($options['CURLOPT_HTTPHEADER']) ? array_merge($options['CURLOPT_HTTPHEADER'], $arrHeaders) : $arrHeaders;
+        }
 
+        $curlOptions = [
             CURLOPT_URL => $url,
             CURLOPT_HEADER => isset($options['CURLOPT_HEADER']) ? $options['CURLOPT_HEADER'] : false,
             CURLOPT_HTTPHEADER => isset($options['CURLOPT_HTTPHEADER']) ? $options['CURLOPT_HTTPHEADER'] : [],

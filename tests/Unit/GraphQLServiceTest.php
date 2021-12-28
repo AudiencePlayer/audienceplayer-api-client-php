@@ -260,6 +260,7 @@ class GraphQLServiceTest extends TestCase
      * @param $methodArgs
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchIsExecuteAsPostRequest
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchLocale
+     * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchIpAddress
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchProjectId
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchApiBaseUrl
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::fetchOAuthClientId
@@ -280,6 +281,7 @@ class GraphQLServiceTest extends TestCase
         // $protectedPropertyName, $expectedDefaultValue, $setValue, $expectedValue, $methodName, $methodArgs
         return [
             ['locale', null, 'foobar', 'foobar', null, null],
+            ['ipAddress', null, '12.34.56.78', '12.34.56.78', null, null],
             ['projectId', null, 1, 1, null, null],
             ['apiBaseUrl', null, 'https://example.com', 'https://example.com', null, null],
             ['oauthClientId', null, '123', '123', null, null],
@@ -338,6 +340,7 @@ class GraphQLServiceTest extends TestCase
      * @throws CustomException
      * @throws \ReflectionException
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::setLocale
+     * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::setIpAddress
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::setProjectId
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::setApiBaseUrl
      * @covers       \AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService::setOAuthClient
@@ -389,6 +392,8 @@ class GraphQLServiceTest extends TestCase
         return [
             // test setLocale
             ['locale', null, 'en', 'setLocale', 'en', false, 'en'],
+            // test setLocale
+            ['ipAddress', null, '12.34.56.78', 'setIpAddress', '12.34.56.78', false, '12.34.56.78'],
             // test setProjectId
             ['projectId', null, 1, 'setProjectId', 1, false, 1],
             // test setApiBaseUrl

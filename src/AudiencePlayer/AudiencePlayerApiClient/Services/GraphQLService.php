@@ -50,6 +50,7 @@ class GraphQLService
         $apiBaseUrl,
         $bearerTokens,
         $locale,
+        $ipAddress,
         $isExecuteAsPostRequest,
         $lastOperationQuery,
         $lastOperationVariables,
@@ -179,8 +180,8 @@ class GraphQLService
             try {
 
                 $this->setLastOperation($query, $variables, $ret = $isResponseAsObject ?
-                    json_decode(strval($this->helper->dispatchCurlCall($apiUrl, $options))) :
-                    $this->helper->dispatchCurlCall($apiUrl, $options)
+                    json_decode(strval($this->helper->dispatchCurlCall($apiUrl, $options, $this->fetchIpAddress()))) :
+                    $this->helper->dispatchCurlCall($apiUrl, $options, $this->fetchIpAddress())
                 );
 
             } catch (\Exception $e) {
@@ -403,6 +404,23 @@ class GraphQLService
     public function fetchLocale(): string
     {
         return strval($this->locale);
+    }
+
+    /**
+     * @param string $ipAddress
+     * @return string
+     */
+    public function setIpAddress(string $ipAddress)
+    {
+        return $this->ipAddress = trim($ipAddress);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function fetchIpAddress(): string
+    {
+        return strval($this->ipAddress);
     }
 
     /**

@@ -81,6 +81,7 @@ class AudiencePlayerApiClient
      * @param int $projectId
      * @param string $apiBaseUrl
      * @param string $locale
+     * @param string $userIp
      * @return AudiencePlayerApiClient
      * @throws Exceptions\CustomException
      */
@@ -89,7 +90,8 @@ class AudiencePlayerApiClient
         string $oauthClientSecret,
         int $projectId,
         string $apiBaseUrl,
-        string $locale = 'en'
+        string $locale = 'en',
+        string $userIp = ''
     )
     {
         if (!self::$instance) {
@@ -105,6 +107,7 @@ class AudiencePlayerApiClient
 
         self::$instance->hydrateConfig($oauthClientId, $oauthClientSecret, $projectId, $apiBaseUrl);
         self::$instance->hydrateLocale($locale);
+        self::$instance->hydrateIpAddress($userIp);
 
         return self::$instance;
     }
@@ -130,6 +133,11 @@ class AudiencePlayerApiClient
     public function hydrateLocale(string $locale)
     {
         return $this->graphQLService->setLocale($locale);
+    }
+
+    public function hydrateIpAddress(string $ipAddress)
+    {
+        return $this->graphQLService->setIpAddress($ipAddress);
     }
 
     /**

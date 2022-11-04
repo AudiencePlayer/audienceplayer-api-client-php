@@ -560,9 +560,9 @@ class GraphQLServiceTest extends TestCase
     {
         return [
             [Globals::OAUTH_SCOPE_USER, 'https://example.com', 0, null],
-            [Globals::OAUTH_SCOPE_USER, 'https://example.com', 1, 'https://example.com/graphql/1/default'],
-            [Globals::OAUTH_SCOPE_USER, 'https://example.com', 2, 'https://example.com/graphql/2/default'],
-            [Globals::OAUTH_SCOPE_USER, 'https://example.com/', 3, 'https://example.com//graphql/3/default'],
+            [Globals::OAUTH_SCOPE_USER, 'https://example.com', 1, 'https://example.com/graphql/1/user'],
+            [Globals::OAUTH_SCOPE_USER, 'https://example.com', 2, 'https://example.com/graphql/2/user'],
+            [Globals::OAUTH_SCOPE_USER, 'https://example.com/', 3, 'https://example.com//graphql/3/user'],
             [Globals::OAUTH_SCOPE_ADMIN, 'https://example.com', 0, 'https://example.com/graphql/core/admin'],
             [Globals::OAUTH_SCOPE_ADMIN, 'https://example.com', 1, 'https://example.com/graphql/core/admin'],
             [Globals::OAUTH_SCOPE_ADMIN, 'https://example.com', 2, 'https://example.com/graphql/core/admin'],

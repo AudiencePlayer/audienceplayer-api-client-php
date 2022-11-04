@@ -362,6 +362,35 @@ class GraphQLOperationQuery extends GraphQLOperation
     }
 
     /**
+     * Fetch details of given subscription
+     *
+     * @param int $subscriptionId
+     * @return GraphQLOperationQuery
+     */
+    public function Subscription(int $subscriptionId)
+    {
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_QUERY,
+            'Subscription',
+            ['id' => $subscriptionId],
+            [
+                'id',
+                'name',
+                'type',
+                'title',
+                'description',
+                'description_short',
+                'price',
+                'currency',
+                'currency_symbol',
+                'images' => 'url,base_url,base_path,file_name,file_path,aspect_ratio_profile',
+            ]
+        );
+    }
+
+    /**
      * Fetch list of offered subscriptions
      *
      * @param array $paymentProviderIds

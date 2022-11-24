@@ -69,7 +69,7 @@ class GraphQLOperation
      * @param array $operationArguments
      * @return $this
      */
-    public function arguments(array $operationArguments)
+    public function arguments(array $operationArguments): self
     {
         // arguments are always merged, since hidden required arguments (e.g. project_id) may have been set in prepareExecution
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, $operationArguments);
@@ -81,7 +81,7 @@ class GraphQLOperation
      * @param array $operationProperties
      * @return $this
      */
-    public function properties(array $operationProperties)
+    public function properties(array $operationProperties): self
     {
         // properties are always be overwritten to avoid merging them with suggested default parameters in prepareExecution
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_PROPERTY, $operationProperties, null, false);
@@ -94,7 +94,7 @@ class GraphQLOperation
      * @param int $offset
      * @return $this
      */
-    public function paginate(int $limit = 0, int $offset = 0)
+    public function paginate(int $limit = 0, int $offset = 0): self
     {
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, 'limit', $limit);
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, 'offset', $offset);
@@ -112,7 +112,7 @@ class GraphQLOperation
      * @param string $searchString
      * @return $this
      */
-    public function search(string $searchString)
+    public function search(string $searchString): self
     {
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, 'search', $searchString);
 
@@ -123,7 +123,7 @@ class GraphQLOperation
      * @param string $locale
      * @return $this
      */
-    public function locale(string $locale)
+    public function locale(string $locale): self
     {
         $this->hydrateOperationParameters(self::PARAMETER_TYPE_ARGUMENT, 'locale', $locale);
 
@@ -135,7 +135,7 @@ class GraphQLOperation
      * @param string $direction
      * @return $this
      */
-    public function sort(string $field, string $direction = 'ASC')
+    public function sort(string $field, string $direction = 'ASC'): self
     {
         $this->hydrateOperationParameters(
             self::PARAMETER_TYPE_ARGUMENT,
@@ -152,7 +152,7 @@ class GraphQLOperation
     /**
      * @return ApiResponse
      */
-    public function execute()
+    public function execute(): ApiResponse
     {
         $arguments = $this->operationParameters[self::PARAMETER_TYPE_ARGUMENT];
         $properties = $this->operationParameters[self::PARAMETER_TYPE_PROPERTY];
@@ -198,7 +198,7 @@ class GraphQLOperation
         array $operationArguments = [],
         array $operationProperties = [],
         bool $isListedOperation = false
-    )
+    ): self
     {
         // First clear any hydrated operation parameters to prepare for new operation
         $this->clearOperationParameters();
@@ -216,12 +216,13 @@ class GraphQLOperation
     }
 
     /**
-     * @param $parameterType
+     * @param string $parameterType
      * @param $key
-     * @param null $value
+     * @param $value
      * @param bool $isMerge
+     * @return void
      */
-    private function hydrateOperationParameters($parameterType, $key, $value = null, $isMerge = true)
+    private function hydrateOperationParameters(string $parameterType, $key, $value = null, bool $isMerge = true): void
     {
         if (is_array($key)) {
 

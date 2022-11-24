@@ -103,7 +103,7 @@ trait TestCaseMockHelper
             // JWT: header
             (object)[
                 'typ' => $properties['typ'] ?? 'JWT',
-                'alg' => $proprtiees['alg'] ?? 'RS256',
+                'alg' => $properties['alg'] ?? 'RS256',
                 'jti' => $properties['jti'] ?? 'a1b2c3d4e5f6',
             ],
             //JWT: payload
@@ -143,6 +143,8 @@ trait TestCaseMockHelper
      * @param $obj
      * @param $prop
      * @param $value
+     * @return void
+     * @throws \ReflectionException
      */
     public function setProtectedProperty($obj, $prop, $value)
     {

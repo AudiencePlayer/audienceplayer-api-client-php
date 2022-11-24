@@ -1,14 +1,17 @@
 # AudiencePlayer API client for PHP
 
 ## Introduction
+
 This package contains the AudiencePlayer API-client for PHP and facilitates:
+
 * API-integration with your own administration and/or back office.
 * Custom frontend application development.
 
-Though not strictly necessary, a pre-existing [AudiencePlayer account](https://www.audienceplayer.com/contact) with issued
-OAuth2 client credentials is the main use case for which this package is optimised. 
+Though not strictly necessary, a pre-existing [AudiencePlayer account](https://www.audienceplayer.com/contact) with
+issued OAuth2 client credentials is the main use case for which this package is optimised.
 
 ## Requirements ##
+
 To use the AudiencePlayer API-client for PHP, the following requirements must be observed:
 
 + PHP >= 7.1 (recommended >= 7.3)
@@ -16,15 +19,16 @@ To use the AudiencePlayer API-client for PHP, the following requirements must be
 + PHP cURL extension
 + Up-to-date OpenSSL (or other SSL/TLS toolkit)
 
-
-
 ## Installation ##
 
 The easiest way to install this package is with [Composer](http://getcomposer.org/doc/00-intro.md):
+
 ```bash
     $ composer require audienceplayer/audienceplayer-api-client-php
 ```
+
 Alternatively, you can integrate this package by downloading it and including the file `AutoLoader.php`:
+
 ```php
     require 'src/AudiencePlayer/AudiencePlayerApiClient/AutoLoader.php';
 ```
@@ -34,6 +38,7 @@ Alternatively, you can integrate this package by downloading it and including th
 ### Instantiation ###
 
 First instantiate the API-client:
+
 ```php
     $clientId = 'yourOAuthClientId';
     $clientSecret = 'yourOAuthClientSecret';
@@ -50,6 +55,7 @@ First instantiate the API-client:
 ```
 
 Authenticate via the proper mechanism to gain access for a given user (or alternatively as an OAuth2 admin client):
+
 ```php    
     # Pre-existing bearerToken that you may have cached for given user    
     $bearerToken = 'eYarTl93Fas3...';
@@ -71,6 +77,7 @@ Authenticate via the proper mechanism to gain access for a given user (or altern
 ### Execute Queries and Mutations ###
 
 Example of a GraphQL query operation:
+
 ```php
     # Example of fetching an article with ID=123, and requesting properties name and type
     $result = $apiClient->query
@@ -141,7 +148,7 @@ For more information about the GraplhQL syntax, please see [graphql.org](https:/
     ';
 
     $result = $apiClient->executeRawGraphQLCall(
-        $apiClient::OAUTH_SCOPE_USER,               # the oauth-scope you wish to address the api with
+        Globals::OAUTH_SCOPE_USER,                  # the oauth-scope you wish to address the api with
         $operation,                                 # raw GraphQL operation (query/mutation) 
         ['articleId' => 1],                         # variables for the operation (if necessary)
         true,                                       # execute as POST request (false for GET)
@@ -151,7 +158,7 @@ For more information about the GraplhQL syntax, please see [graphql.org](https:/
     );
 
     $result = $apiClient->executeRawGraphQLCall(
-        $apiClient::OAUTH_SCOPE_USER,               # The oauth-scope you wish to address the api with
+        Globals::OAUTH_SCOPE_USER,                  # The oauth-scope you wish to address the api with
         'query{Article(id:1){id,name}}',            # simple raw GraphQL operation without variables 
         [],                                         # the variables for the operation (if necessary)
         true,                                       # execute as POST request (false for GET)
@@ -161,9 +168,29 @@ For more information about the GraplhQL syntax, please see [graphql.org](https:/
     );
 ```
 
+### Testing ###
+
+You can run unit and static tests by executing:
+
+```bash
+    $ composer run test
+```
+
+Or run them separately:
+
+```bash
+    $ ./vendor/bin/phpunit
+    $ ./vendor/bin/phpstan
+```
+
 ## License ##
+
 [BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php).
 Copyright (c) 2020, AudiencePlayer
 
 ## Support ##
-Contact: [www.audienceplayer.com](https://www.audienceplayer.com) - [support@audienceplayer.com](mailto:support@audienceplayer.com)
+
+Contact:
+
+- [www.audienceplayer.com](https://www.audienceplayer.com)
+- [support@audienceplayer.com](mailto:support@audienceplayer.com)

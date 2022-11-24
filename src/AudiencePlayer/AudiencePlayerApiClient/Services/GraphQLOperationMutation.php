@@ -35,18 +35,23 @@ declare(strict_types=1);
 namespace AudiencePlayer\AudiencePlayerApiClient\Services;
 
 use AudiencePlayer\AudiencePlayerApiClient\Resources\Globals;
+use DateTime;
 
 class GraphQLOperationMutation extends GraphQLOperation
 {
     /**
      * Authenticate as an OAuth client on admin scope
      *
-     * @param string $clientId
-     * @param string $clientSecret
-     * @param int $projectId
+     * @param int|null $projectId
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function AdminClientAuthenticate(string $clientId, string $clientSecret, int $projectId)
+    public function AdminClientAuthenticate(
+        int $projectId = null,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_CLIENT,
@@ -54,9 +59,9 @@ class GraphQLOperationMutation extends GraphQLOperation
             Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
             'ClientAuthenticate',
             [
-                'project_id' => $projectId,
-                'client_id' => $clientId,
-                'client_secret' => $clientSecret,
+                'project_id' => $projectId ?: $this->graphQLService->fetchProjectId(),
+                'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+                'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
             ],
             ['access_token', 'user_id', 'user_email', 'expires_in']
         );
@@ -65,11 +70,11 @@ class GraphQLOperationMutation extends GraphQLOperation
     /**
      * Authenticate as an OAuth client
      *
-     * @param string $clientId
-     * @param string $clientSecret
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientAuthenticate(string $clientId, string $clientSecret)
+    public function ClientAuthenticate(string $clientId = null, string $clientSecret = null): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_CLIENT,
@@ -78,8 +83,8 @@ class GraphQLOperationMutation extends GraphQLOperation
             'ClientAuthenticate',
             [
                 'project_id' => $this->graphQLService->fetchProjectId(),
-                'client_id' => strval($clientId),
-                'client_secret' => strval($clientSecret),
+                'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+                'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
             ],
             ['access_token', 'user_id', 'user_email', 'expires_in']
         );
@@ -88,47 +93,63 @@ class GraphQLOperationMutation extends GraphQLOperation
     /**
      * As an OAuth client authenticate for given user by userEmail
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param string $userEmail
      * @param bool $isAutoRegister
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientUserAuthenticateByEmail(string $clientId, string $clientSecret, string $userEmail, bool $isAutoRegister = false)
+    public function ClientUserAuthenticateByEmail(
+        string $userEmail,
+        bool $isAutoRegister = false,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
-        return $this->ClientUserAuthenticate($clientId, $clientSecret, 0, $userEmail, $isAutoRegister);
+        return $this->ClientUserAuthenticate(0, $userEmail, $isAutoRegister, $clientId, $clientSecret);
     }
 
     /**
      * As an OAuth client authenticate for given user by userId
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param int $userId
      * @param bool $isAutoRegister
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientUserAuthenticateById(string $clientId, string $clientSecret, int $userId, bool $isAutoRegister = false)
+    public function ClientUserAuthenticateById(
+        int $userId,
+        bool $isAutoRegister = false,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
-        return $this->ClientUserAuthenticate($clientId, $clientSecret, $userId, '', $isAutoRegister);
+        return $this->ClientUserAuthenticate($userId, '', $isAutoRegister, $clientId, $clientSecret);
     }
 
     /**
      * As an OAuth client authenticate for given user
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param int $userId
      * @param string $userEmail
      * @param bool $isAutoRegister
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientUserAuthenticate(string $clientId, string $clientSecret, int $userId, string $userEmail, bool $isAutoRegister = false)
+    public function ClientUserAuthenticate(
+        int $userId,
+        string $userEmail,
+        bool $isAutoRegister = false,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
         $args = [
             'project_id' => $this->graphQLService->fetchProjectId(),
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
         ];
 
         if ($userId) {
@@ -151,17 +172,21 @@ class GraphQLOperationMutation extends GraphQLOperation
     /**
      * As an OAuth client authenticate update a given user
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param int $userId
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientUserUpdate(string $clientId, string $clientSecret, int $userId)
+    public function ClientUserUpdate(
+        int $userId,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
         $args = [
             'project_id' => $this->graphQLService->fetchProjectId(),
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
             'id' => $userId,
         ];
 
@@ -178,18 +203,23 @@ class GraphQLOperationMutation extends GraphQLOperation
     /**
      * As an OAuth client authenticate update a given user
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param int $userId
      * @param string $userEmail
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationMutation
      */
-    public function ClientUserDelete(string $clientId, string $clientSecret, int $userId, string $userEmail)
+    public function ClientUserDelete(
+        int $userId,
+        string $userEmail,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
     {
         $args = [
             'project_id' => $this->graphQLService->fetchProjectId(),
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
             'id' => $userId,
             'email' => $userEmail,
         ];
@@ -204,7 +234,137 @@ class GraphQLOperationMutation extends GraphQLOperation
         );
     }
 
-    public function UserAuthenticate(string $email, string $password)
+    /**
+     * As an OAuth client manage the subscription entitlement for a given user
+     *
+     * @param int $userId
+     * @param int $subscriptionId
+     * @param DateTime|null $expiresAt
+     * @param string|null $clientId
+     * @param string|null $clientSecret
+     * @return GraphQLOperationMutation
+     */
+    public function ClientUserSubscriptionEntitlementManage(
+        int $userId,
+        int $subscriptionId,
+        string $action,
+        DateTime $expiresAt = null,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
+    {
+        $args = [
+            'project_id' => $this->graphQLService->fetchProjectId(),
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
+            'user_id' => $userId,
+            'subscription_id' => $subscriptionId,
+            'action' => [
+                'type' => 'enum',
+                'value' => Globals::ENTITLEMENT_ACTIONS[$action] ?? null,
+            ],
+            'expires_at' => $expiresAt ? $expiresAt->format(Globals::DATETIME_ISO8601_FORMAT) : null,
+        ];
+
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
+            'ClientUserSubscriptionEntitlementManage',
+            $args,
+            []
+        );
+    }
+
+    /**
+     * As an OAuth client manage the product entitlement for a given user
+     *
+     * @param int $userId
+     * @param int $productId
+     * @param string $action
+     * @param string|null $clientId
+     * @param string|null $clientSecret
+     * @return GraphQLOperationMutation
+     */
+    public function ClientUserProductEntitlementManage(
+        int $userId,
+        int $productId,
+        string $action,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
+    {
+        $args = [
+            'project_id' => $this->graphQLService->fetchProjectId(),
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'action' => [
+                'type' => 'enum',
+                'value' => Globals::ENTITLEMENT_ACTIONS[$action] ?? null,
+            ],
+        ];
+
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
+            'ClientUserProductEntitlementManage',
+            $args,
+            []
+        );
+    }
+
+    /**
+     * As an OAuth client fetch the Article-Asset play config for a given user
+     *
+     * @param int $userId
+     * @param int $articleId
+     * @param int $assetId
+     * @param string|null $clientId
+     * @param string|null $clientSecret
+     * @return GraphQLOperationMutation
+     */
+    public function ClientUserArticleAssetPlay(
+        int $userId,
+        int $articleId,
+        int $assetId,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationMutation
+    {
+        $args = [
+            'project_id' => $this->graphQLService->fetchProjectId(),
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
+            'user_id' => $userId,
+            'article_id' => $articleId,
+            'asset_id' => $assetId,
+        ];
+
+        return $this->prepareExecution(
+            Globals::OAUTH_ACCESS_AS_AGENT_USER,
+            Globals::OAUTH_SCOPE_USER,
+            Globals::GRAPHQL_OPERATION_TYPE_MUTATION,
+            'ClientUserArticleAssetPlay',
+            $args,
+            [
+                'appa',
+                'appr',
+                'duration',
+                'aspect_ratio',
+                'time_marker_end',
+                'time_marker_intro_end',
+                'time_marker_intro_start',
+                'pulse_token',
+                'subtitles {id,url,locale,locale_label}',
+                'entitlements {mime_type,manifest,expires_in,token}',
+            ]
+        );
+    }
+
+    public function UserAuthenticate(string $email, string $password): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -224,7 +384,7 @@ class GraphQLOperationMutation extends GraphQLOperation
      *
      * @return GraphQLOperationMutation
      */
-    public function UserDetailsUpdate()
+    public function UserDetailsUpdate(): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -245,7 +405,12 @@ class GraphQLOperationMutation extends GraphQLOperation
      * @param string $voucherCode
      * @return GraphQLOperationMutation
      */
-    public function UserSubscriptionAcquire(int $paymentProviderId, int $subscriptionId, string $redirectUrlPath = '', string $voucherCode = '')
+    public function UserSubscriptionAcquire(
+        int $paymentProviderId,
+        int $subscriptionId,
+        string $redirectUrlPath = '',
+        string $voucherCode = ''
+    ): GraphQLOperationMutation
     {
         $args = [
             'payment_provider_id' => $paymentProviderId,
@@ -279,7 +444,12 @@ class GraphQLOperationMutation extends GraphQLOperation
      * @param string $voucherCode
      * @return GraphQLOperationMutation
      */
-    public function UserProductAcquire(int $paymentProviderId, array $productIds, string $redirectUrlPath = '', string $voucherCode = '')
+    public function UserProductAcquire(
+        int $paymentProviderId,
+        array $productIds,
+        string $redirectUrlPath = '',
+        string $voucherCode = ''
+    ): GraphQLOperationMutation
     {
         $arr = [];
         foreach ($productIds as $productId) {
@@ -329,7 +499,7 @@ class GraphQLOperationMutation extends GraphQLOperation
         string $redirectUrlPath = '',
         int $subscriptionId = null,
         int $userSubscriptionId = null
-    )
+    ): GraphQLOperationMutation
     {
         $args = [
             'code' => $voucherCode,
@@ -364,7 +534,7 @@ class GraphQLOperationMutation extends GraphQLOperation
      * @param int $userPaymentAccountOrderId
      * @return GraphQLOperationMutation
      */
-    public function UserPaymentAccountOrderValidate(int $userPaymentAccountOrderId)
+    public function UserPaymentAccountOrderValidate(int $userPaymentAccountOrderId): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -382,7 +552,7 @@ class GraphQLOperationMutation extends GraphQLOperation
      * @param string $pairingCode
      * @return GraphQLOperationMutation
      */
-    public function UserDevicePairingClaim(string $pairingCode)
+    public function UserDevicePairingClaim(string $pairingCode): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -400,7 +570,7 @@ class GraphQLOperationMutation extends GraphQLOperation
      * @param int $deviceId
      * @return GraphQLOperationMutation
      */
-    public function UserDevicePairingDelete(int $deviceId)
+    public function UserDevicePairingDelete(int $deviceId): GraphQLOperationMutation
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,

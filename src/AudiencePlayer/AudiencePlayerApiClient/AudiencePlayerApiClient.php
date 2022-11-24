@@ -38,16 +38,10 @@ use AudiencePlayer\AudiencePlayerApiClient\Resources\Globals;
 use AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLService;
 use AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLOperationMutation;
 use AudiencePlayer\AudiencePlayerApiClient\Services\GraphQLOperationQuery;
+use DateTime;
 
 class AudiencePlayerApiClient
 {
-    public const
-        GRAPHQL_OPERATION_SORT_DIRECTION_ASC = Globals::GRAPHQL_OPERATION_SORT_DIRECTION_ASC,
-        GRAPHQL_OPERATION_SORT_DIRECTION_DESC = Globals::GRAPHQL_OPERATION_SORT_DIRECTION_DESC,
-
-        OAUTH_SCOPE_USER = Globals::OAUTH_SCOPE_USER,
-        OAUTH_SCOPE_ADMIN = Globals::OAUTH_SCOPE_ADMIN;
-
     private
         $graphQLService;
 
@@ -156,11 +150,7 @@ class AudiencePlayerApiClient
 
         } elseif ($isAllowRenewal) {
 
-            $result = $this->mutation->AdminClientAuthenticate(
-                $this->graphQLService->fetchOAuthClientId(),
-                $this->graphQLService->fetchOAuthClientSecret(),
-                $this->graphQLService->fetchProjectId()
-            )->execute();
+            $result = $this->mutation->AdminClientAuthenticate()->execute();
 
             if (isset($result->getData(true)->access_token)) {
                 $ret = $this->graphQLService->setBearerToken($result->getData(true)->access_token, Globals::OAUTH_ACCESS_AS_AGENT_CLIENT);
@@ -207,12 +197,7 @@ class AudiencePlayerApiClient
             // Try to authenticate user by id (auto-creation explicitly is excluded)
             if ($userId) {
 
-                $result = $this->mutation->ClientUserAuthenticateById(
-                    $this->graphQLService->fetchOAuthClientId(),
-                    $this->graphQLService->fetchOAuthClientSecret(),
-                    $userId,
-                    false
-                )
+                $result = $this->mutation->ClientUserAuthenticateById($userId, false)
                     ->arguments(trim($userEmail) ? ['user_email' => $userEmail] : [])
                     ->execute();
 
@@ -241,12 +226,7 @@ class AudiencePlayerApiClient
                 }
 
                 // additional userArgs can be passed for auto-creation: $userArgs = ['user_password' => '****', 'locale' => 'en']
-                $result = $this->mutation->ClientUserAuthenticateByEmail(
-                    $this->graphQLService->fetchOAuthClientId(),
-                    $this->graphQLService->fetchOAuthClientSecret(),
-                    $userEmail,
-                    $isAutoRegister
-                )
+                $result = $this->mutation->ClientUserAuthenticateByEmail($userEmail, $isAutoRegister)
                     ->arguments($args)
                     ->execute();
 
@@ -268,12 +248,7 @@ class AudiencePlayerApiClient
      */
     public function fetchUser(int $userId, string $userEmail = '', array $responseProperties = [])
     {
-        $result = $this->query->ClientUser(
-            $this->graphQLService->fetchOAuthClientId(),
-            $this->graphQLService->fetchOAuthClientSecret(),
-            $userId,
-            $userEmail
-        )
+        $result = $this->query->ClientUser($userId, $userEmail)
             ->properties($responseProperties ?: ['id', 'email'])
             ->execute();
 
@@ -297,11 +272,7 @@ class AudiencePlayerApiClient
      */
     public function updateUser(int $userId, array $updateArguments, array $responseProperties = [])
     {
-        $result = $this->mutation->ClientUserUpdate(
-            $this->graphQLService->fetchOAuthClientId(),
-            $this->graphQLService->fetchOAuthClientSecret(),
-            $userId
-        )
+        $result = $this->mutation->ClientUserUpdate($userId)
             ->arguments($updateArguments)
             ->properties($responseProperties ?: ['id', 'email'])
             ->execute();
@@ -316,14 +287,36 @@ class AudiencePlayerApiClient
      */
     public function deleteUser(int $userId, string $userEmail): bool
     {
-        return $this->mutation->ClientUserDelete(
-            $this->graphQLService->fetchOAuthClientId(),
-            $this->graphQLService->fetchOAuthClientSecret(),
-            $userId,
-            $userEmail
-        )
+        return $this->mutation->ClientUserDelete($userId, $userEmail)
             ->execute()
             ->isSuccessful();
+    }
+
+    public function manageUserSubscriptionEntitlement(int $userId, int $subscriptionId, string $action, DateTime $expiresAt = null): bool
+    {
+        return $this->mutation->ClientUserSubscriptionEntitlementManage($userId, $subscriptionId, $action, $expiresAt)
+            ->execute()
+            ->isSuccessful();
+    }
+
+    public function manageUserProductEntitlement(int $userId, int $productId, string $action): bool
+    {
+        return $this->mutation->ClientUserProductEntitlementManage($userId, $productId, $action)
+            ->execute()
+            ->isSuccessful();
+    }
+
+    /**
+     * @param int $userId
+     * @param int $articleId
+     * @param int $assetId
+     * @return mixed
+     */
+    public function fetchUserArticleAssetPlayConfig(int $userId, int $articleId, int $assetId)
+    {
+        return $this->mutation->ClientUserArticleAssetPlay($userId, $articleId, $assetId)
+            ->execute()
+            ->getData(true);
     }
 
     /**
@@ -339,7 +332,7 @@ class AudiencePlayerApiClient
      * @param bool $isStringifyResult
      * @return mixed|string
      */
-    public function fetchLastOperationResult($isErrorsOnly = false, $isStringifyResult = false)
+    public function fetchLastOperationResult(bool $isErrorsOnly = false, bool $isStringifyResult = false)
     {
         $lastOperation = $this->graphQLService->fetchLastOperationResult();
 

@@ -28,7 +28,7 @@ class ApiResponseTest extends TestCase
         $this->assertSame($expectedResult, $this->accessProtectedProperty($apiResponse, 'parsingStatus'));
     }
 
-    public function parseDataDataProvider()
+    public function parseDataDataProvider(): array
     {
         // $rawInputResult, $operationName, $expectedParsedInputResult, $expectedResult
         return [

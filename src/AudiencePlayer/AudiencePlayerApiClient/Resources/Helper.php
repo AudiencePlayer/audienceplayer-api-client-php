@@ -47,22 +47,22 @@ class Helper
      * @param array $arr
      * @return bool
      */
-    public function hasArrayOnlyIntegers(array $arr)
+    public function hasArrayOnlyIntegers(array $arr): bool
     {
-        if (is_array($arr) && $arr) {
+        if ($arr) {
 
-            $allNumeric = true;
+            $isAllNumeric = true;
 
             foreach ($arr as $value) {
 
                 if (false === is_int($value)) {
 
-                    $allNumeric = false;
+                    $isAllNumeric = false;
                     break;
                 }
             }
 
-            return $allNumeric;
+            return $isAllNumeric;
 
         } else {
 
@@ -75,9 +75,9 @@ class Helper
      * @param $url
      * @param array $options
      * @param string $forwardForIp
-     * @return mixed
+     * @return string
      */
-    public function dispatchCurlCall($url, array $options = [], string $forwardForIp = '')
+    public function dispatchCurlCall($url, array $options = [], string $forwardForIp = ''): string
     {
         $ch = curl_init();
 
@@ -90,7 +90,7 @@ class Helper
         $s = curl_exec($ch);
         curl_close($ch);
 
-        return $s;
+        return strval($s);
     }
 
     public function parseSingleGraphQLArgument($value, $key = null): string
@@ -145,7 +145,7 @@ class Helper
      * @param string $forwardForIp
      * @return array
      */
-    protected function prepareCurlRequest($url, array $options = [], string $forwardForIp = '')
+    protected function prepareCurlRequest($url, array $options = [], string $forwardForIp = ''): array
     {
         if (trim($forwardForIp)) {
             $arrHeaders = ['X-Forwarded-For: ' . trim($forwardForIp)];

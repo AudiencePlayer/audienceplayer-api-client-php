@@ -52,7 +52,7 @@ class GraphQLServiceTest extends TestCase
 
     }
 
-    public function assembleAndDispatchGraphQLCallDataProvider()
+    public function assembleAndDispatchGraphQLCallDataProvider(): array
     {
         // $serviceProperties, $query, $curlResponse, $expectedDataResult, $expectedErrorCode
         return [
@@ -62,7 +62,7 @@ class GraphQLServiceTest extends TestCase
             // with incorrect query-assembly
             [[], '', 'foobar', null, Globals::STATUS_ARGUMENT_ERROR],
             // with unparsable API result
-            [['apiBaseUrl' => 'foobar', 'projectId' => 1], 'query{UserDetails}', null, null, Globals::STATUS_API_RESPONSE_PARSE_ERROR],
+            [['apiBaseUrl' => 'foobar', 'projectId' => 1], 'query{UserDetails}', '', null, Globals::STATUS_API_RESPONSE_PARSE_ERROR],
             [['apiBaseUrl' => 'foobar', 'projectId' => 1], 'query{UserDetails}', 'foobar', null, Globals::STATUS_API_RESPONSE_PARSE_ERROR],
             // with unexpected API result
             [['apiBaseUrl' => 'foobar', 'projectId' => 1], 'query{UserDetails}', '{"foobar":true}', null, Globals::STATUS_API_RESPONSE_FORMAT_ERROR],
@@ -116,7 +116,7 @@ class GraphQLServiceTest extends TestCase
         }
     }
 
-    public function dispatchGraphQLCallDataProvider()
+    public function dispatchGraphQLCallDataProvider(): array
     {
         // $isExecuteAsPostRequest, $isResponseAsObject, $isWithVariables, $scope, $curlResponse, $expectedResult, $expectedErrorCode
         return [
@@ -147,10 +147,14 @@ class GraphQLServiceTest extends TestCase
     public function testParseBearerToken($bearerToken, $tokenComponent, $expectedResult)
     {
         $graphQLService = $this->createGraphQLService();
-        $this->assertEquals($expectedResult, $graphQLService->parseBearerToken($bearerToken, $tokenComponent));
+        if (trim($tokenComponent)) {
+            $this->assertEquals($expectedResult, $graphQLService->parseBearerToken($bearerToken, $tokenComponent));
+        } else {
+            $this->assertEquals($expectedResult, $graphQLService->parseBearerToken($bearerToken));
+        }
     }
 
-    public function parseBearerTokenDataProvider()
+    public function parseBearerTokenDataProvider(): array
     {
         $token = $this->createBearerToken([
             'typ' => 'JWT',
@@ -165,33 +169,39 @@ class GraphQLServiceTest extends TestCase
         return [
             // with empty token
             [
-                '',
-                0,
-                null,
+                'bearerToken' => '',
+                'tokenComponent' => '',
+                'expectedResult' => null,
             ],
             // with corrupted token
             [
-                'abcdefgh',
-                0,
-                null,
+                'bearerToken' => 'abcdefgh',
+                'tokenComponent' => '',
+                'expectedResult' => null,
             ],
-            // with valid header
+            // with valid token (default: expect payload)
             [
-                $token,
-                0,
-                (object)['typ' => 'JWT', 'alg' => 'RS256', 'jti' => 'a1b2c3d4e5f6'],
+                'bearerToken' => $token,
+                'tokenComponent' => '',
+                'expectedResult' => (object)['exp' => 123456, 'scopes' => ['foo']],
             ],
-            // with valid payload
+            // with valid token (expect payload)
             [
-                $token,
-                1,
-                (object)['exp' => 123456, 'scopes' => ['foo']],
+                'bearerToken' => $token,
+                'tokenComponent' => Globals::BEARER_TOKEN_COMPONENT_PAYLOAD,
+                'expectedResult' => (object)['exp' => 123456, 'scopes' => ['foo']],
             ],
-            // with valid signature
+            // with valid token (expect header)
             [
-                $token,
-                2,
-                'body-phpunit-signature',
+                'bearerToken' => $token,
+                'tokenComponent' => Globals::BEARER_TOKEN_COMPONENT_HEADER,
+                'expectedResult' => (object)['typ' => 'JWT', 'alg' => 'RS256', 'jti' => 'a1b2c3d4e5f6'],
+            ],
+            // with valid token (expect signature)
+            [
+                'bearerToken' => $token,
+                'tokenComponent' => Globals::BEARER_TOKEN_COMPONENT_SIGNATURE,
+                'expectedResult' => 'body-phpunit-signature',
             ],
         ];
     }
@@ -209,7 +219,7 @@ class GraphQLServiceTest extends TestCase
         $this->assertEquals($expectedResult, $graphQLService->validateBearerTokenExpiry($bearerToken, $scope, $minimumTtl));
     }
 
-    public function validateBearerTokenExpiryDataProvider()
+    public function validateBearerTokenExpiryDataProvider(): array
     {
         return [
             // with valid token, with scopes, within ttl maximum
@@ -276,7 +286,7 @@ class GraphQLServiceTest extends TestCase
         $this->assertClassGetMethod($graphQLService, $protectedPropertyName, $expectedDefaultValue, $setValue, $expectedValue, $methodName, $methodArgs);
     }
 
-    public function fetchPropertyMethodsDataProvider()
+    public function fetchPropertyMethodsDataProvider(): array
     {
         // $protectedPropertyName, $expectedDefaultValue, $setValue, $expectedValue, $methodName, $methodArgs
         return [
@@ -386,7 +396,7 @@ class GraphQLServiceTest extends TestCase
         }
     }
 
-    public function setMethodsDataProvider()
+    public function setMethodsDataProvider(): array
     {
         // $protectedPropertyName, $expectedDefaultValue, $expectedValue, $methodName, $methodArgs, $isSplatMethodArgs, $methodReturnValue
         return [
@@ -445,21 +455,21 @@ class GraphQLServiceTest extends TestCase
     /**
      * @dataProvider parseGraphQLArgsFromArrayDataProvider
      * @param $args
-     * @param $withParentheses
+     * @param $isWithParentheses
      * @param $expectedResult
      * @throws \ReflectionException
      */
-    public function testParseGraphQLArgsFromArray($args, $withParentheses, $expectedResult)
+    public function testParseGraphQLArgsFromArray($args, $isWithParentheses, $expectedResult)
     {
         $graphQLService = $this->createGraphQLService();
         $this->assertEquals($expectedResult, $this->accessProtectedMethod($graphQLService, 'parseGraphQLArgsFromArray', [
-            $args, $withParentheses
+            $args, $isWithParentheses
         ]));
     }
 
-    public function parseGraphQLArgsFromArrayDataProvider()
+    public function parseGraphQLArgsFromArrayDataProvider(): array
     {
-        // $args, $withParentheses, $expectedResult
+        // $args, $isWithParentheses, $expectedResult
         return [
             [[], true, '',],
             [[], false, '',],
@@ -492,19 +502,19 @@ class GraphQLServiceTest extends TestCase
     /**
      * @dataProvider parseGraphQLPropsFromArrayDataProvider
      * @param $args
-     * @param $withBraces
+     * @param $isWithBraces
      * @param $expectedResult
      * @throws \ReflectionException
      */
-    public function testParseGraphQLPropsFromArray($args, $withBraces, $expectedResult)
+    public function testParseGraphQLPropsFromArray($args, $isWithBraces, $expectedResult)
     {
         $graphQLService = $this->createGraphQLService();
         $this->assertEquals($expectedResult, $this->accessProtectedMethod($graphQLService, 'parseGraphQLPropsFromArray', [
-            $args, $withBraces
+            $args, $isWithBraces
         ]));
     }
 
-    public function parseGraphQLPropsFromArrayDataProvider()
+    public function parseGraphQLPropsFromArrayDataProvider(): array
     {
         return [
             [[], true, '',],
@@ -556,7 +566,7 @@ class GraphQLServiceTest extends TestCase
         $this->assertSame($expectedResult, $this->accessProtectedMethod($graphQLService, 'assembleApiUrl', [$scope]));
     }
 
-    public function assembleApiUrlDataProvider()
+    public function assembleApiUrlDataProvider(): array
     {
         return [
             [Globals::OAUTH_SCOPE_USER, 'https://example.com', 0, null],

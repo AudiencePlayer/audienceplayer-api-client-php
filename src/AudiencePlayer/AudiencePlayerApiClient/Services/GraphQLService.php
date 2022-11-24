@@ -88,7 +88,7 @@ class GraphQLService
         string $operationName,
         array $args,
         array $responseProperties
-    )
+    ): ApiResponse
     {
         if (
             in_array($operationType, [Globals::GRAPHQL_OPERATION_TYPE_MUTATION, Globals::GRAPHQL_OPERATION_TYPE_QUERY]) &&
@@ -180,7 +180,7 @@ class GraphQLService
             try {
 
                 $this->setLastOperation($query, $variables, $ret = $isResponseAsObject ?
-                    json_decode(strval($this->helper->dispatchCurlCall($apiUrl, $options, $this->fetchIpAddress()))) :
+                    json_decode($this->helper->dispatchCurlCall($apiUrl, $options, $this->fetchIpAddress())) :
                     $this->helper->dispatchCurlCall($apiUrl, $options, $this->fetchIpAddress())
                 );
 
@@ -212,13 +212,13 @@ class GraphQLService
      * @param string $tokenComponent
      * @return mixed|null
      */
-    public function parseBearerToken(string $bearerToken, $tokenComponent = 'payload')
+    public function parseBearerToken(string $bearerToken, string $tokenComponent = Globals::BEARER_TOKEN_COMPONENT_PAYLOAD)
     {
         if ($tokenComponents = explode('.', $bearerToken)) {
 
-            if ($tokenComponent === 'header' || $tokenComponent === 0) {
+            if ($tokenComponent === Globals::BEARER_TOKEN_COMPONENT_HEADER) {
                 $index = 0;
-            } elseif ($tokenComponent === 'payload' || $tokenComponent === 1) {
+            } elseif ($tokenComponent === Globals::BEARER_TOKEN_COMPONENT_PAYLOAD) {
                 $index = 1;
             } else {
                 $index = 2;
@@ -255,6 +255,7 @@ class GraphQLService
     /**
      * @param bool $isMutationAsPostRequest
      * @param bool $isQueryAsPostRequest
+     * @return void
      */
     public function setIsExecuteAsPostRequest(bool $isMutationAsPostRequest = true, bool $isQueryAsPostRequest = true): void
     {
@@ -274,7 +275,7 @@ class GraphQLService
      * @param string $accessAgentType
      * @return string
      */
-    public function setBearerToken(string $bearerToken, string $accessAgentType)
+    public function setBearerToken(string $bearerToken, string $accessAgentType): string
     {
         if (in_array($accessAgentType, [Globals::OAUTH_ACCESS_AS_AGENT_CLIENT, Globals::OAUTH_ACCESS_AS_AGENT_USER])) {
 
@@ -282,7 +283,7 @@ class GraphQLService
 
         } else {
 
-            return false;
+            return '';
         }
     }
 
@@ -292,15 +293,16 @@ class GraphQLService
      */
     public function fetchBearerToken(string $accessAgentType = Globals::OAUTH_ACCESS_AS_AGENT_CLIENT): string
     {
-        return strval(isset($this->bearerTokens[$accessAgentType]) ? $this->bearerTokens[$accessAgentType] : '');
+        return $this->bearerTokens[$accessAgentType] ?? '';
     }
 
     /**
      * @param string $oauthClientId
      * @param string $oauthClientSecret
+     * @return void
      * @throws CustomException
      */
-    public function setOAuthClient(string $oauthClientId, string $oauthClientSecret)
+    public function setOAuthClient(string $oauthClientId, string $oauthClientSecret): void
     {
         if ($oauthClientId) {
             $this->oauthClientId = $oauthClientId;
@@ -322,7 +324,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchOAuthClientId(): string
     {
@@ -330,7 +332,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchOAuthClientSecret(): string
     {
@@ -342,7 +344,7 @@ class GraphQLService
      * @return int
      * @throws CustomException
      */
-    public function setProjectId(int $projectId)
+    public function setProjectId(int $projectId): int
     {
         if ($projectId > 0) {
             return $this->projectId = $projectId;
@@ -355,7 +357,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function fetchProjectId(): int
     {
@@ -367,7 +369,7 @@ class GraphQLService
      * @return string
      * @throws CustomException
      */
-    public function setApiBaseUrl(string $apiBaseUrl)
+    public function setApiBaseUrl(string $apiBaseUrl): string
     {
         $apiBaseUrl = rtrim($apiBaseUrl, '/');
 
@@ -382,7 +384,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchApiBaseUrl(): string
     {
@@ -393,13 +395,13 @@ class GraphQLService
      * @param string $locale
      * @return string
      */
-    public function setLocale(string $locale)
+    public function setLocale(string $locale): string
     {
         return $this->locale = trim($locale);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchLocale(): string
     {
@@ -410,13 +412,13 @@ class GraphQLService
      * @param string $ipAddress
      * @return string
      */
-    public function setIpAddress(string $ipAddress)
+    public function setIpAddress(string $ipAddress): string
     {
         return $this->ipAddress = trim($ipAddress);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchIpAddress(): string
     {
@@ -427,8 +429,9 @@ class GraphQLService
      * @param string $operation
      * @param array $variables
      * @param $result
+     * @return void
      */
-    public function setLastOperation(string $operation, array $variables, $result)
+    public function setLastOperation(string $operation, array $variables, $result): void
     {
         $this->lastOperationQuery = $operation;
         $this->lastOperationVariables = $variables;
@@ -436,7 +439,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function fetchLastOperationQuery(): string
     {
@@ -444,7 +447,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function fetchLastOperationVariables(): array
     {
@@ -452,7 +455,7 @@ class GraphQLService
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function fetchLastOperationResult(): array
     {
@@ -463,10 +466,10 @@ class GraphQLService
 
     /**
      * @param array $args
-     * @param bool $withParentheses
+     * @param bool $isWithParentheses
      * @return string
      */
-    protected function parseGraphQLArgsFromArray(array $args, $withParentheses = true): string
+    protected function parseGraphQLArgsFromArray(array $args, bool $isWithParentheses = true): string
     {
         array_walk($args, function (&$value, $key) {
             $value = $this->helper->parseSingleGraphQLArgument($value, $key);
@@ -474,7 +477,7 @@ class GraphQLService
 
         if ($args) {
 
-            return $withParentheses ? '(' . implode(',', $args) . ')' : implode(',', $args);
+            return $isWithParentheses ? '(' . implode(',', $args) . ')' : implode(',', $args);
 
         } else {
 
@@ -484,10 +487,10 @@ class GraphQLService
 
     /**
      * @param array $args
-     * @param bool $withBraces
+     * @param bool $isWithBraces
      * @return string
      */
-    protected function parseGraphQLPropsFromArray(array $args, $withBraces = true): string
+    protected function parseGraphQLPropsFromArray(array $args, bool $isWithBraces = true): string
     {
         array_walk($args, function (&$value, $key) {
 
@@ -502,7 +505,7 @@ class GraphQLService
 
         if ($args) {
 
-            return $withBraces ? '{' . implode(',', $args) . '}' : implode(',', $args);
+            return $isWithBraces ? '{' . implode(',', $args) . '}' : implode(',', $args);
 
         } else {
 
@@ -511,13 +514,18 @@ class GraphQLService
     }
 
     /**
-     * @param $operationType
-     * @param $operationName
-     * @param $args
-     * @param $responseProperties
+     * @param string $operationType
+     * @param string $operationName
+     * @param array $args
+     * @param array $responseProperties
      * @return string
      */
-    protected function assembleGraphQLQueryString($operationType, $operationName, $args, $responseProperties): string
+    protected function assembleGraphQLQueryString(
+        string $operationType,
+        string $operationName,
+        array $args,
+        array $responseProperties
+    ): string
     {
         return
             $operationType . '{' .
@@ -531,7 +539,7 @@ class GraphQLService
      * @param string $scope
      * @return null|string
      */
-    protected function assembleApiUrl(string $scope)
+    protected function assembleApiUrl(string $scope): ?string
     {
         if ($this->fetchApiBaseUrl()) {
 

@@ -52,6 +52,10 @@ class Globals
         API_RESPONSE_FORMAT_JSON = 'json',
         API_RESPONSE_FORMAT_OBJECT = 'object',
 
+        BEARER_TOKEN_COMPONENT_HEADER = 'header',
+        BEARER_TOKEN_COMPONENT_PAYLOAD = 'payload',
+        BEARER_TOKEN_COMPONENT_SIGNATURE = 'signature',
+
         ARTICLE_TYPE_EPISODE = 'episode',
         ARTICLE_TYPE_FILM = 'film',
         ARTICLE_TYPE_SEASON = 'season',
@@ -73,7 +77,9 @@ class Globals
         OPERATOR_CONTEXT_DELTA = 'delta',
         OPERATOR_CONTEXT_XS4ALL = 'xs4all',
         OPERATOR_CONTEXT_HORIZON = 'horizon',
-        OPERATOR_CONTEXT_ZIGGO = 'ziggo';
+        OPERATOR_CONTEXT_ZIGGO = 'ziggo',
+
+        DATETIME_ISO8601_FORMAT = 'Y-m-d\TH:i:s\Z';
 
     public const
         OAUTH_SCOPES = [self::OAUTH_SCOPE_ADMIN, self::OAUTH_SCOPE_USER],
@@ -97,6 +103,15 @@ class Globals
         self::OPERATOR_CONTEXT_XS4ALL,
         self::OPERATOR_CONTEXT_HORIZON,
         self::OPERATOR_CONTEXT_ZIGGO,
+    ];
+
+    public const
+        ENTITLEMENT_ACTION_FULFIL = 'fulfil',
+        ENTITLEMENT_ACTION_REVOKE = 'revoke';
+
+    public const ENTITLEMENT_ACTIONS = [
+        self::ENTITLEMENT_ACTION_FULFIL => self::ENTITLEMENT_ACTION_FULFIL,
+        self::ENTITLEMENT_ACTION_REVOKE => self::ENTITLEMENT_ACTION_REVOKE,
     ];
 
     public const

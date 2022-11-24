@@ -170,7 +170,7 @@ class ApiResponse
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors ?: [];
     }
@@ -178,7 +178,7 @@ class ApiResponse
     /**
      * @return null
      */
-    public function getFirstErrorCode()
+    public function getFirstErrorCode(): ?int
     {
         return isset($this->errors, $this->errors[0], $this->errors[0]->code) ?
             $this->errors[0]->code : null;
@@ -228,15 +228,15 @@ class ApiResponse
      * @param string $operation
      * @param string $message
      * @param int $code
-     * @return false|object|string
+     * @return object
      */
-    public static function assembleDefaultErrorResponse(string $operation, string $message, int $code = Globals::STATUS_GENERAL_ERROR)
+    public static function assembleDefaultErrorResponse(string $operation, string $message, int $code = Globals::STATUS_GENERAL_ERROR): object
     {
         return (object)[
             'data' => null,
             'errors' => [(object)[
-                'operation' => $operation ?? '',
-                'message' => $message ?? '',
+                'operation' => $operation,
+                'message' => $message,
                 'code' => $code,
             ]],
         ];

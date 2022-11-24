@@ -41,17 +41,21 @@ class GraphQLOperationQuery extends GraphQLOperation
     /**
      * As an OAuth client verify a payload
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param string $payload
-     * @return mixed
+     * @param string|null $clientId
+     * @param string|null $clientSecret
+     * @return GraphQLOperationQuery
      */
-    public function ClientPayloadVerify(string $clientId, string $clientSecret, string $payload)
+    public function ClientPayloadVerify(
+        string $payload,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationQuery
     {
         $args = [
             'project_id' => $this->graphQLService->fetchProjectId(),
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
             'payload' => $payload,
         ];
 
@@ -65,7 +69,15 @@ class GraphQLOperationQuery extends GraphQLOperation
         );
     }
 
-    public function Config(string $platformContext = Globals::PLATFORM_CONTEXT_WEB, string $operatorContext = Globals::OPERATOR_CONTEXT_WEB)
+    /**
+     * @param string $platformContext
+     * @param string $operatorContext
+     * @return GraphQLOperationQuery
+     */
+    public function Config(
+        string $platformContext = Globals::PLATFORM_CONTEXT_WEB,
+        string $operatorContext = Globals::OPERATOR_CONTEXT_WEB
+    ): GraphQLOperationQuery
     {
         $args = [
             'platform_context' => [
@@ -95,18 +107,23 @@ class GraphQLOperationQuery extends GraphQLOperation
     /**
      * As an OAuth client query a user
      *
-     * @param string $clientId
-     * @param string $clientSecret
      * @param int $userId
      * @param string|null $email
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      * @return GraphQLOperationQuery
      */
-    public function ClientUser(string $clientId, string $clientSecret, int $userId = 0, string $email = null)
+    public function ClientUser(
+        int $userId = 0,
+        string $email = null,
+        string $clientId = null,
+        string $clientSecret = null
+    ): GraphQLOperationQuery
     {
         $args = [
             'project_id' => $this->graphQLService->fetchProjectId(),
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
+            'client_id' => $clientId ?: $this->graphQLService->fetchOAuthClientId(),
+            'client_secret' => $clientSecret ?: $this->graphQLService->fetchOAuthClientSecret(),
         ];
 
         if ($userId) {
@@ -130,7 +147,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      *
      * @return GraphQLOperationQuery
      */
-    public function UserDetails()
+    public function UserDetails(): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -147,7 +164,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      *
      * @return GraphQLOperationQuery
      */
-    public function UserSubscriptionList()
+    public function UserSubscriptionList(): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -179,7 +196,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      *
      * @return GraphQLOperationQuery
      */
-    public function UserProductList()
+    public function UserProductList(): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -202,7 +219,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      *
      * @return GraphQLOperationQuery
      */
-    public function DeviceList()
+    public function DeviceList(): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -222,7 +239,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param string $articleUrlSlug
      * @return GraphQLOperationQuery
      */
-    public function Article(int $articleId, string $articleUrlSlug = '')
+    public function Article(int $articleId, string $articleUrlSlug = ''): GraphQLOperationQuery
     {
         $args = [];
 
@@ -257,7 +274,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param array $types
      * @return GraphQLOperationQuery
      */
-    public function ArticleList(int $categoryId = null, array $types = [])
+    public function ArticleList(int $categoryId = null, array $types = []): GraphQLOperationQuery
     {
         $args = [];
 
@@ -304,7 +321,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param string $categoryUrlSlug
      * @return GraphQLOperationQuery
      */
-    public function Category(int $categoryId, string $categoryUrlSlug = '')
+    public function Category(int $categoryId, string $categoryUrlSlug = ''): GraphQLOperationQuery
     {
         $args = [];
 
@@ -336,7 +353,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param int|null $parentId
      * @return GraphQLOperationQuery
      */
-    public function CategoryList(int $parentId = null)
+    public function CategoryList(int $parentId = null): GraphQLOperationQuery
     {
         $args = [];
 
@@ -367,7 +384,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param int $subscriptionId
      * @return GraphQLOperationQuery
      */
-    public function Subscription(int $subscriptionId)
+    public function Subscription(int $subscriptionId): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -396,7 +413,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param array $paymentProviderIds
      * @return GraphQLOperationQuery
      */
-    public function SubscriptionList(array $paymentProviderIds)
+    public function SubscriptionList(array $paymentProviderIds): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -428,7 +445,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param int $productId
      * @return GraphQLOperationQuery
      */
-    public function Product(int $productId)
+    public function Product(int $productId): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -458,7 +475,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param array $paymentProviderIds
      * @return GraphQLOperationQuery
      */
-    public function ProductList(array $paymentProviderIds)
+    public function ProductList(array $paymentProviderIds): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,
@@ -490,7 +507,7 @@ class GraphQLOperationQuery extends GraphQLOperation
      * @param $pageId
      * @return GraphQLOperationQuery
      */
-    public function Page($pageId)
+    public function Page($pageId): GraphQLOperationQuery
     {
         return $this->prepareExecution(
             Globals::OAUTH_ACCESS_AS_AGENT_USER,

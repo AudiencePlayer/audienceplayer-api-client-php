@@ -24,10 +24,11 @@
         "codedungeon/phpunit-result-printer": "^0.29.3",
         "johnkary/phpunit-speedtrap": "^3.2",
         "symfony/var-dumper": "^5.1",
-        "phpunit/phpunit": "^8"
+        "phpunit/phpunit": "^8",
+        "phpstan/phpstan": "^1.9"
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit && phpstan"
     },
     "autoload": {
         "psr-4": {

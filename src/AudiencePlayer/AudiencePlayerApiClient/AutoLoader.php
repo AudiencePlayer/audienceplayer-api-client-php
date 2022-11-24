@@ -39,8 +39,9 @@ class AutoLoader
     /**
      * @codeCoverageIgnore
      * @param $className
+     * @return void
      */
-    public static function autoload($className)
+    public static function autoload($className): void
     {
         $prefix = __NAMESPACE__ . '\\';
         $prefixLength = strlen($prefix);
@@ -59,7 +60,7 @@ class AutoLoader
      * @codeCoverageIgnore
      * @return bool
      */
-    public static function register()
+    public static function register(): bool
     {
         return spl_autoload_register(array(__CLASS__, "autoload"));
     }
@@ -68,7 +69,7 @@ class AutoLoader
      * @codeCoverageIgnore
      * @return bool
      */
-    public static function unregister()
+    public static function unregister(): bool
     {
         return spl_autoload_unregister(array(__CLASS__, "autoload"));
     }

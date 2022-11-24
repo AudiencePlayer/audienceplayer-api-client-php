@@ -55,7 +55,7 @@ class AudiencePlayerApiClientTest extends TestCase
         }
     }
 
-    public function hydrateConfigDataProvider()
+    public function hydrateConfigDataProvider(): array
     {
         return [
             ['init', '', 'secret', 1, 'http://example.com', Globals::STATUS_CONFIG_CLIENT_ID_ERROR],
@@ -104,7 +104,7 @@ class AudiencePlayerApiClientTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    public function hydrateValidatedOrRenewedBearerTokenForClientDataProvider()
+    public function hydrateValidatedOrRenewedBearerTokenForClientDataProvider(): array
     {
         $validBearerToken = $this->createBearerToken(['exp' => time() + 3600]);
         $expiredBearerToken = $this->createBearerToken(['exp' => time() - 3600]);
@@ -194,7 +194,7 @@ class AudiencePlayerApiClientTest extends TestCase
         $this->assertSame($expectedResult, $result['access_token']);
     }
 
-    public function hydrateValidatedOrRenewedBearerTokenForUserDataProvider()
+    public function hydrateValidatedOrRenewedBearerTokenForUserDataProvider(): array
     {
         $userEmail = 'phpunit' . $this->fetchCurrentProcessId() . '@example.com';
         $validBearerToken = $this->createBearerToken(['exp' => time() + 3600, 'scopes' => [Globals::OAUTH_SCOPE_USER]]);

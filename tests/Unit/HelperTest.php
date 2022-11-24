@@ -86,7 +86,7 @@ class HelperTest extends TestCase
         $this->assertEquals($expectedResult, $helper->parseSingleGraphQLArgument($value, $key));
     }
 
-    public function parseSingleGraphQLArgumentDataProvider()
+    public function parseSingleGraphQLArgumentDataProvider(): array
     {
         // $key, $value, $expectedResult
         return [

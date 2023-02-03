@@ -545,7 +545,7 @@ class GraphQLService
 
             if ($scope === Globals::OAUTH_SCOPE_ADMIN) {
 
-                return $this->fetchApiBaseUrl() . '/graphql/core/admin';
+                return $this->fetchApiBaseUrl() . '/graphql/' . $this->fetchProjectId() . '/admin';
 
             } elseif ($scope === Globals::OAUTH_SCOPE_USER && $this->fetchProjectId()) {
 
